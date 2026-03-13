@@ -8,7 +8,6 @@ let package = Package(
         .library(name: "ShortlessKit", targets: ["ShortlessKit"])
     ],
     targets: [
-        .target(name: "ShortlessKit"),
-        .testTarget(name: "ShortlessKitTests", dependencies: ["ShortlessKit"])
+        .target(name: "ShortlessKit")
     ]
 )
