@@ -1,0 +1,136 @@
+import SwiftUI
+import SafariServices
+import ShortlessKit
+
+/// Main screen — 4 platform toggle cards + block counter.
+/// Layout matches the browser extension popup.
+struct DashboardView: View {
+    @ObservedObject var settings: SettingsStore
+    @ObservedObject var blockCount: BlockCountStore
+    @State private var showOnboarding = false
+    @Environment(\.scenePhase) private var scenePhase
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: ShortlessTheme.sectionSpacing) {
+                    header
+                    platformCards
+                    footer
+                }
+                .padding(ShortlessTheme.containerPadding)
+            }
+            .background(ShortlessTheme.background.ignoresSafeArea())
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gearshape")
+                            .foregroundColor(ShortlessTheme.textTertiary)
+                    }
+                }
+            }
+            .sheet(isPresented: $showOnboarding) {
+                OnboardingView()
+            }
+            .onAppear {
+                checkFirstLaunch()
+                blockCount.refresh()
+            }
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase == .active {
+                    blockCount.refresh()
+                }
+            }
+        }
+        .preferredColorScheme(.dark)
+    }
+
+    // MARK: - Header
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text("Shortless")
+                    .font(.system(size: ShortlessTheme.titleSize, weight: .bold))
+                    .foregroundColor(ShortlessTheme.textPrimary)
+                    .tracking(-0.3)
+
+                Text("v\(appVersion)")
+                    .font(.system(size: ShortlessTheme.versionSize, weight: .medium))
+                    .foregroundColor(ShortlessTheme.textTertiary)
+            }
+
+            Text("Block the Scroll. Keep the Content.")
+                .font(.system(size: ShortlessTheme.captionSize))
+                .foregroundColor(ShortlessTheme.textTertiary)
+                .tracking(0.2)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // MARK: - Platform Cards
+
+    private var platformCards: some View {
+        VStack(spacing: ShortlessTheme.cardSpacing) {
+            ForEach(Platform.allCases) { platform in
+                PlatformCardView(
+                    platform: platform,
+                    isEnabled: Binding(
+                        get: { settings.isEnabled(platform) },
+                        set: { newValue in
+                            settings.setEnabled(platform, newValue)
+                            reloadContentBlocker()
+                        }
+                    )
+                )
+            }
+        }
+    }
+
+    // MARK: - Footer
+
+    private var footer: some View {
+        VStack(spacing: 0) {
+            Rectangle()
+                .fill(ShortlessTheme.footerBorder)
+                .frame(height: 1)
+
+            HStack(spacing: 4) {
+                Text("Blocked today:")
+                    .font(.system(size: ShortlessTheme.captionSize))
+                    .foregroundColor(ShortlessTheme.textTertiary)
+
+                Text("\(blockCount.todayCount)")
+                    .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
+                    .foregroundColor(ShortlessTheme.accent)
+            }
+            .padding(.top, 12)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Blocked \(blockCount.todayCount) elements today")
+        }
+    }
+
+    // MARK: - Helpers
+
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+    }
+
+    private func checkFirstLaunch() {
+        let key = "hasCompletedOnboarding"
+        guard let defaults = UserDefaults(suiteName: SettingsStore.appGroupID) else { return }
+        if !defaults.bool(forKey: key) {
+            showOnboarding = true
+            defaults.set(true, forKey: key)
+        }
+    }
+
+    private func reloadContentBlocker() {
+        let identifier = "dev.pmartin1915.shortless.ContentBlocker"
+        SFContentBlockerManager.reloadContentBlocker(withIdentifier: identifier) { error in
+            if let error {
+                print("[Shortless] Content Blocker reload failed: \(error.localizedDescription)")
+            }
+        }
+    }
+}

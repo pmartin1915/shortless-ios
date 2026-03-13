@@ -1,0 +1,121 @@
+name: Shortless
+
+options:
+  bundleIdPrefix: dev.pmartin1915
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+packages:
+  ShortlessKit:
+    path: ShortlessKit
+
+targets:
+  Shortless:
+    type: application
+    platform: iOS
+    sources:
+      - path: ShortlessApp
+    dependencies:
+      - package: ShortlessKit
+      - target: ShortlessContentBlocker
+        embed: true
+      - target: ShortlessSafariExtension
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless
+        SWIFT_VERSION: "5.9"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        CODE_SIGN_ENTITLEMENTS: Shortless.entitlements
+    info:
+      properties:
+        CFBundleDisplayName: Shortless
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+
+  ShortlessContentBlocker:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ShortlessContentBlocker
+    dependencies:
+      - package: ShortlessKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.ContentBlocker
+        SWIFT_VERSION: "5.9"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        CODE_SIGN_ENTITLEMENTS: ShortlessContentBlocker/ShortlessContentBlocker.entitlements
+    info:
+      properties:
+        CFBundleDisplayName: Shortless Content Blocker
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.Safari.content-blocker
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ContentBlockerRequestHandler
+
+  ShortlessSafariExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ShortlessSafariExtension
+        excludes:
+          - "Resources/**"
+          - "manifest.json"
+    resources:
+      - path: ShortlessSafariExtension/Resources
+      - path: ShortlessSafariExtension/manifest.json
+    dependencies:
+      - package: ShortlessKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.SafariExtension
+        SWIFT_VERSION: "5.9"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        CODE_SIGN_ENTITLEMENTS: ShortlessSafariExtension/ShortlessSafariExtension.entitlements
+    info:
+      properties:
+        CFBundleDisplayName: Shortless Safari Extension
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.Safari.web-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).SafariWebExtensionHandler
+
+  ShortlessTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: ShortlessTests
+    dependencies:
+      - target: Shortless
+      - package: ShortlessKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.Tests
+        SWIFT_VERSION: "5.9"
+    info:
+      properties:
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+
+schemes:
+  Shortless:
+    build:
+      targets:
+        Shortless: all
+        ShortlessContentBlocker: all
+        ShortlessSafariExtension: all
+    test:
+      targets:
+        - ShortlessTests
+    run:
+      config: Debug

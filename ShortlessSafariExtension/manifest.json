@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Shortless",
+  "version": "1.0.0",
+  "description": "Block short-form video content in Safari",
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "css": ["styles/youtube-hide.css"],
+      "js": ["content-scripts/common.js", "content-scripts/youtube.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.instagram.com/*"],
+      "css": ["styles/instagram-hide.css"],
+      "js": ["content-scripts/common.js", "content-scripts/instagram.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.snapchat.com/*"],
+      "css": ["styles/snapchat-hide.css"],
+      "js": ["content-scripts/common.js", "content-scripts/snapchat.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "nativeMessaging"
+  ]
+}
