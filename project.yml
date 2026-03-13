@@ -10,6 +10,12 @@ packages:
   ShortlessKit:
     path: ShortlessKit
 
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+
 targets:
   Shortless:
     type: application
@@ -25,11 +31,9 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless
-        SWIFT_VERSION: "5.9"
-        MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
         CODE_SIGN_ENTITLEMENTS: Shortless.entitlements
     info:
+      path: ShortlessApp/Info.plist
       properties:
         CFBundleDisplayName: Shortless
         CFBundleShortVersionString: $(MARKETING_VERSION)
@@ -43,16 +47,16 @@ targets:
     platform: iOS
     sources:
       - path: ShortlessContentBlocker
+        excludes:
+          - "*.entitlements"
     dependencies:
       - package: ShortlessKit
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.ContentBlocker
-        SWIFT_VERSION: "5.9"
-        MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
         CODE_SIGN_ENTITLEMENTS: ShortlessContentBlocker/ShortlessContentBlocker.entitlements
     info:
+      path: ShortlessContentBlocker/Info.plist
       properties:
         CFBundleDisplayName: Shortless Content Blocker
         CFBundleShortVersionString: $(MARKETING_VERSION)
@@ -69,6 +73,7 @@ targets:
         excludes:
           - "Resources/**"
           - "manifest.json"
+          - "*.entitlements"
     resources:
       - path: ShortlessSafariExtension/Resources
       - path: ShortlessSafariExtension/manifest.json
@@ -77,11 +82,9 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.SafariExtension
-        SWIFT_VERSION: "5.9"
-        MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
         CODE_SIGN_ENTITLEMENTS: ShortlessSafariExtension/ShortlessSafariExtension.entitlements
     info:
+      path: ShortlessSafariExtension/Info.plist
       properties:
         CFBundleDisplayName: Shortless Safari Extension
         CFBundleShortVersionString: $(MARKETING_VERSION)
@@ -101,8 +104,8 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.Tests
-        SWIFT_VERSION: "5.9"
     info:
+      path: ShortlessTests/Info.plist
       properties:
         CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
