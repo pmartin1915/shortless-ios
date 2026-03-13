@@ -1,0 +1,130 @@
+name: Deploy to App Store
+
+# Runs manually or on version tags
+on:
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: 'Upload to App Store Connect'
+        required: true
+        default: true
+        type: boolean
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    name: Archive & Upload to App Store
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          XCODE_PATH=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+          echo "Using: $XCODE_PATH"
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Install Apple Distribution Certificate
+        env:
+          CERTIFICATE_P12: ${{ secrets.APPLE_CERTIFICATE_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        run: |
+          # Create a temporary keychain
+          KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
+          KEYCHAIN_PASSWORD=$(openssl rand -hex 12)
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # Decode and import the certificate
+          echo "$CERTIFICATE_P12" | base64 --decode > $RUNNER_TEMP/certificate.p12
+          security import $RUNNER_TEMP/certificate.p12 \
+            -P "$CERTIFICATE_PASSWORD" \
+            -A -t cert -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+
+          # Add keychain to search list
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+          # Allow codesign to access the keychain without prompting
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -s -k "$KEYCHAIN_PASSWORD" \
+            "$KEYCHAIN_PATH"
+
+      - name: Setup App Store Connect API Key
+        env:
+          API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$API_KEY" > ~/private_keys/AuthKey_${API_KEY_ID}.p8
+
+      - name: Resolve Swift Packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project Shortless.xcodeproj \
+            -scheme Shortless
+
+      - name: Archive
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: |
+          xcodebuild archive \
+            -project Shortless.xcodeproj \
+            -scheme Shortless \
+            -archivePath $RUNNER_TEMP/Shortless.xcarchive \
+            -destination 'generic/platform=iOS' \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_${API_KEY_ID}.p8 \
+            -authenticationKeyID "$API_KEY_ID" \
+            -authenticationKeyIssuerID "$API_ISSUER_ID"
+
+      - name: Export & Upload to App Store Connect
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          # Create export options plist
+          cat > $RUNNER_TEMP/ExportOptions.plist << 'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>destination</key>
+            <string>upload</string>
+          </dict>
+          </plist>
+          PLIST
+
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/Shortless.xcarchive \
+            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
+            -exportPath $RUNNER_TEMP/export \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_${API_KEY_ID}.p8 \
+            -authenticationKeyID "$API_KEY_ID" \
+            -authenticationKeyIssuerID "$API_ISSUER_ID"
+
+      - name: Clean Up Keychain
+        if: always()
+        run: |
+          security delete-keychain $RUNNER_TEMP/signing.keychain-db 2>/dev/null || true
+          rm -f $RUNNER_TEMP/certificate.p12
+          rm -rf ~/private_keys
