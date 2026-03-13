@@ -42,27 +42,29 @@ jobs:
 
       - name: Build
         run: |
+          set -o pipefail
           xcodebuild build \
             -project Shortless.xcodeproj \
             -scheme Shortless \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            | xcpretty --color || true
+            | xcpretty --color
 
       - name: Run Unit Tests
         run: |
+          set -o pipefail
           xcodebuild test \
             -project Shortless.xcodeproj \
             -scheme Shortless \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            | xcpretty --color --test || true
+            | xcpretty --color --test
 
       - name: Test Results Summary
         if: always()
