@@ -32,6 +32,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless
         CODE_SIGN_ENTITLEMENTS: Shortless.entitlements
     info:
+      path: Shortless-Info.plist
       properties:
         CFBundleDisplayName: Shortless
         CFBundleShortVersionString: $(MARKETING_VERSION)
@@ -51,6 +52,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.ContentBlocker
         CODE_SIGN_ENTITLEMENTS: ShortlessContentBlocker/ShortlessContentBlocker.entitlements
     info:
+      path: ShortlessContentBlocker/Info.plist
       properties:
         CFBundleDisplayName: Shortless Content Blocker
         CFBundleShortVersionString: $(MARKETING_VERSION)
@@ -70,6 +72,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.SafariExtension
         CODE_SIGN_ENTITLEMENTS: ShortlessSafariExtension/ShortlessSafariExtension.entitlements
     info:
+      path: ShortlessSafariExtension/Info.plist
       properties:
         CFBundleDisplayName: Shortless Safari Extension
         CFBundleShortVersionString: $(MARKETING_VERSION)
@@ -89,6 +92,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.Tests
     info:
+      path: ShortlessTests/Info.plist
       properties:
         CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
