@@ -30,7 +30,12 @@ jobs:
           xcodebuild -version
 
       - name: Install XcodeGen
-        run: brew install xcodegen
+        run: |
+          curl -sL https://github.com/yonaskolb/XcodeGen/releases/latest/download/xcodegen.zip -o /tmp/xcodegen.zip
+          unzip -q /tmp/xcodegen.zip -d /tmp/xcodegen
+          XCODEGEN_BIN=$(find /tmp/xcodegen -name "xcodegen" -type f | head -1)
+          sudo cp "$XCODEGEN_BIN" /usr/local/bin/xcodegen
+          sudo chmod +x /usr/local/bin/xcodegen
 
       - name: Generate Xcode Project
         run: xcodegen generate

@@ -36,6 +36,14 @@ jobs:
           sudo cp "$XCODEGEN_BIN" /usr/local/bin/xcodegen
           sudo chmod +x /usr/local/bin/xcodegen
 
+      - name: Debug XcodeGen
+        run: |
+          xcodegen --version
+          echo "--- project.yml ---"
+          cat project.yml
+          echo "--- file listing ---"
+          find . -not -path './.git/*' | sort
+
       - name: Generate Xcode Project
         run: xcodegen generate
 

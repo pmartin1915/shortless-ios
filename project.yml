@@ -20,8 +20,7 @@ targets:
   Shortless:
     type: application
     platform: iOS
-    sources:
-      - path: ShortlessApp
+    sources: ShortlessApp
     dependencies:
       - package: ShortlessKit
       - target: ShortlessContentBlocker
@@ -44,10 +43,7 @@ targets:
   ShortlessContentBlocker:
     type: app-extension
     platform: iOS
-    sources:
-      - path: ShortlessContentBlocker
-        excludes:
-          - "*.entitlements"
+    sources: ShortlessContentBlocker
     dependencies:
       - package: ShortlessKit
     settings:
@@ -66,15 +62,7 @@ targets:
   ShortlessSafariExtension:
     type: app-extension
     platform: iOS
-    sources:
-      - path: ShortlessSafariExtension
-        excludes:
-          - "Resources/**"
-          - "manifest.json"
-          - "*.entitlements"
-    resources:
-      - path: ShortlessSafariExtension/Resources
-      - path: ShortlessSafariExtension/manifest.json
+    sources: ShortlessSafariExtension
     dependencies:
       - package: ShortlessKit
     settings:
@@ -93,8 +81,7 @@ targets:
   ShortlessTests:
     type: bundle.unit-test
     platform: iOS
-    sources:
-      - path: ShortlessTests
+    sources: ShortlessTests
     dependencies:
       - target: Shortless
       - package: ShortlessKit
@@ -111,8 +98,6 @@ schemes:
     build:
       targets:
         Shortless: all
-        ShortlessContentBlocker: all
-        ShortlessSafariExtension: all
     test:
       targets:
         - ShortlessTests
