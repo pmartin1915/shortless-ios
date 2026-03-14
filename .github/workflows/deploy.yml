@@ -45,7 +45,6 @@ jobs:
           CERTIFICATE_P12: ${{ secrets.APPLE_CERTIFICATE_P12 }}
           CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: |
-          # Create a temporary keychain
           KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
           KEYCHAIN_PASSWORD=$(openssl rand -hex 12)
 
@@ -53,17 +52,13 @@ jobs:
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
-          # Decode and import the certificate
           echo "$CERTIFICATE_P12" | base64 --decode > $RUNNER_TEMP/certificate.p12
           security import $RUNNER_TEMP/certificate.p12 \
             -P "$CERTIFICATE_PASSWORD" \
             -A -t cert -f pkcs12 \
             -k "$KEYCHAIN_PATH"
 
-          # Add keychain to search list
           security list-keychain -d user -s "$KEYCHAIN_PATH"
-
-          # Allow codesign to access the keychain without prompting
           security set-key-partition-list \
             -S apple-tool:,apple: \
             -s -k "$KEYCHAIN_PASSWORD" \
@@ -96,16 +91,15 @@ jobs:
             -allowProvisioningUpdates \
             -authenticationKeyPath ~/private_keys/AuthKey_${API_KEY_ID}.p8 \
             -authenticationKeyID "$API_KEY_ID" \
-            -authenticationKeyIssuerID "$API_ISSUER_ID"
+            -authenticationKeyIssuerID "$API_ISSUER_ID" \
+            ARCHS=arm64
 
       - name: Export & Upload to App Store Connect
         env:
           API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          # Create export options plist
-          cat > $RUNNER_TEMP/ExportOptions.plist << 'PLIST'
+          cat > $RUNNER_TEMP/ExportOptions.plist << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
@@ -116,7 +110,7 @@ jobs:
             <string>upload</string>
           </dict>
           </plist>
-          PLIST
+          EOF
 
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/Shortless.xcarchive \
