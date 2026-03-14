@@ -95,6 +95,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.Tests
+        PRODUCT_NAME: ShortlessTests
     info:
       path: ShortlessTests/Info.plist
       properties:
