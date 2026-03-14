@@ -45,7 +45,7 @@ jobs:
           find . -not -path './.git/*' | sort
 
       - name: Generate Xcode Project
-        run: xcodegen generate --verbose
+        run: xcodegen generate
 
       - name: Resolve Swift Packages
         run: |
