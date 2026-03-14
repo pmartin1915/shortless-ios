@@ -45,6 +45,7 @@ targets:
       properties:
         CFBundleDisplayName: Shortless
         CFBundleIconName: AppIcon
+        ITSAppUsesNonExemptEncryption: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
