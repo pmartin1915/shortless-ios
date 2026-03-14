@@ -110,14 +110,8 @@ jobs:
             -scheme Shortless \
             -archivePath $RUNNER_TEMP/Shortless.xcarchive \
             -destination 'generic/platform=iOS' \
-            ARCHS=arm64 \
-            CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}" \
-            PROVISIONING_PROFILE_SPECIFIER= \
-            Shortless_PROVISIONING_PROFILE_SPECIFIER="Shortless AppStore" \
-            ShortlessContentBlocker_PROVISIONING_PROFILE_SPECIFIER="Shortless ContentBlocker AppStore" \
-            ShortlessSafariExtension_PROVISIONING_PROFILE_SPECIFIER="Shortless SafariExtension AppStore"
+            -configuration Release \
+            ARCHS=arm64
 
       - name: Export & Upload to App Store Connect
         env:

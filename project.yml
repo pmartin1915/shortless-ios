@@ -34,6 +34,11 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless
         PRODUCT_NAME: Shortless
         CODE_SIGN_ENTITLEMENTS: Shortless.entitlements
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "Shortless AppStore"
     info:
       path: Shortless-Info.plist
       properties:
@@ -55,6 +60,11 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.ContentBlocker
         PRODUCT_NAME: ShortlessContentBlocker
         CODE_SIGN_ENTITLEMENTS: ShortlessContentBlocker/ShortlessContentBlocker.entitlements
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "Shortless ContentBlocker AppStore"
     info:
       path: ShortlessContentBlocker/Info.plist
       properties:
@@ -76,6 +86,11 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.SafariExtension
         PRODUCT_NAME: ShortlessSafariExtension
         CODE_SIGN_ENTITLEMENTS: ShortlessSafariExtension/ShortlessSafariExtension.entitlements
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "Shortless SafariExtension AppStore"
     info:
       path: ShortlessSafariExtension/Info.plist
       properties:
