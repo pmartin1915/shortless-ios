@@ -1,6 +1,5 @@
 name: Deploy to App Store
 
-# Runs manually or on version tags
 on:
   workflow_dispatch:
     inputs:
@@ -64,6 +63,32 @@ jobs:
             -s -k "$KEYCHAIN_PASSWORD" \
             "$KEYCHAIN_PATH"
 
+      - name: Install Provisioning Profiles
+        env:
+          PROFILE_APP: ${{ secrets.PROVISIONING_PROFILE_APP }}
+          PROFILE_CB: ${{ secrets.PROVISIONING_PROFILE_CONTENT_BLOCKER }}
+          PROFILE_EXT: ${{ secrets.PROVISIONING_PROFILE_SAFARI_EXT }}
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+
+          echo "$PROFILE_APP" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/app.mobileprovision
+          echo "$PROFILE_CB" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/contentblocker.mobileprovision
+          echo "$PROFILE_EXT" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/safariext.mobileprovision
+
+          # Extract UUIDs for build settings
+          APP_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/app.mobileprovision))
+          CB_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/contentblocker.mobileprovision))
+          EXT_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/safariext.mobileprovision))
+
+          # Rename files to UUID.mobileprovision (required by Xcode)
+          mv ~/Library/MobileDevice/Provisioning\ Profiles/app.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${APP_UUID}.mobileprovision
+          mv ~/Library/MobileDevice/Provisioning\ Profiles/contentblocker.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${CB_UUID}.mobileprovision
+          mv ~/Library/MobileDevice/Provisioning\ Profiles/safariext.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${EXT_UUID}.mobileprovision
+
+          echo "APP_PROFILE_UUID=$APP_UUID" >> $GITHUB_ENV
+          echo "CB_PROFILE_UUID=$CB_UUID" >> $GITHUB_ENV
+          echo "EXT_PROFILE_UUID=$EXT_UUID" >> $GITHUB_ENV
+
       - name: Setup App Store Connect API Key
         env:
           API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
@@ -79,37 +104,46 @@ jobs:
             -scheme Shortless
 
       - name: Archive
-        env:
-          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
         run: |
           xcodebuild archive \
             -project Shortless.xcodeproj \
             -scheme Shortless \
             -archivePath $RUNNER_TEMP/Shortless.xcarchive \
             -destination 'generic/platform=iOS' \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath ~/private_keys/AuthKey_${API_KEY_ID}.p8 \
-            -authenticationKeyID "$API_KEY_ID" \
-            -authenticationKeyIssuerID "$API_ISSUER_ID" \
             ARCHS=arm64 \
-            CODE_SIGN_STYLE=Automatic \
-            CODE_SIGN_IDENTITY="Apple Distribution"
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}" \
+            PROVISIONING_PROFILE_SPECIFIER= \
+            Shortless_PROVISIONING_PROFILE_SPECIFIER="Shortless AppStore" \
+            ShortlessContentBlocker_PROVISIONING_PROFILE_SPECIFIER="Shortless ContentBlocker AppStore" \
+            ShortlessSafariExtension_PROVISIONING_PROFILE_SPECIFIER="Shortless SafariExtension AppStore"
 
       - name: Export & Upload to App Store Connect
         env:
           API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
         run: |
-          cat > $RUNNER_TEMP/ExportOptions.plist << 'EOF'
+          cat > $RUNNER_TEMP/ExportOptions.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
             <key>method</key>
             <string>app-store-connect</string>
-            <key>destination</key>
-            <string>upload</string>
+            <key>teamID</key>
+            <string>${{ secrets.APPLE_TEAM_ID }}</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>dev.pmartin1915.shortless</key>
+              <string>Shortless AppStore</string>
+              <key>dev.pmartin1915.shortless.ContentBlocker</key>
+              <string>Shortless ContentBlocker AppStore</string>
+              <key>dev.pmartin1915.shortless.SafariExtension</key>
+              <string>Shortless SafariExtension AppStore</string>
+            </dict>
           </dict>
           </plist>
           EOF
@@ -118,14 +152,14 @@ jobs:
             -archivePath $RUNNER_TEMP/Shortless.xcarchive \
             -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
             -exportPath $RUNNER_TEMP/export \
-            -allowProvisioningUpdates \
             -authenticationKeyPath ~/private_keys/AuthKey_${API_KEY_ID}.p8 \
             -authenticationKeyID "$API_KEY_ID" \
             -authenticationKeyIssuerID "$API_ISSUER_ID"
 
-      - name: Clean Up Keychain
+      - name: Clean Up
         if: always()
         run: |
           security delete-keychain $RUNNER_TEMP/signing.keychain-db 2>/dev/null || true
           rm -f $RUNNER_TEMP/certificate.p12
           rm -rf ~/private_keys
+          rm -rf ~/Library/MobileDevice/Provisioning\ Profiles
