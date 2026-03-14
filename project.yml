@@ -43,6 +43,7 @@ targets:
       path: Shortless-Info.plist
       properties:
         CFBundleDisplayName: Shortless
+        CFBundleIconName: AppIcon
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}

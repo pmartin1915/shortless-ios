@@ -3,6 +3,10 @@
   "name": "Shortless",
   "version": "1.0.0",
   "description": "Block short-form video content in Safari",
+  "icons": {
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
