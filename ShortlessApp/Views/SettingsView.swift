@@ -67,8 +67,8 @@ struct SettingsView: View {
     // These URLs are compile-time constants — safe to force-unwrap, but using
     // guard-let for defensive coding and App Store review safety.
     private var privacyPolicyURL: URL {
-        guard let url = URL(string: "https://github.com/pmartin1915/shortless/blob/master/packages/extension/PRIVACY_POLICY.md") else {
-            return URL(string: "https://github.com/pmartin1915/shortless")!
+        guard let url = URL(string: "https://github.com/pmartin1915/shortless-ios/blob/master/PRIVACY_POLICY.md") else {
+            return URL(string: "https://github.com/pmartin1915/shortless-ios")!
         }
         return url
     }
