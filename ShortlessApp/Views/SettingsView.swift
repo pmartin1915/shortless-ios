@@ -35,20 +35,21 @@ struct SettingsView: View {
             }
 
             Section(header: Text("How It Works")) {
-                Text("Shortless blocks short-form video content in Safari using two layers:")
+                Text("Shortless blocks short-form video content using three layers:")
                     .font(.system(size: ShortlessTheme.captionSize))
                     .foregroundColor(ShortlessTheme.textSecondary)
 
                 bulletPoint("Content Blocker", detail: "Declarative rules that block URLs and hide UI elements before they load.")
                 bulletPoint("Web Extension", detail: "Content scripts that redirect short-form URLs and catch dynamically loaded content.")
+                bulletPoint("DNS Filter", detail: "A local VPN blocks TikTok DNS queries system-wide. No data leaves your device.")
             }
 
             Section(header: Text("Limitations")) {
-                Text("Shortless only works in Safari. Third-party browsers (Chrome, Firefox) on iOS do not support content blocking extensions.")
+                Text("YouTube, Instagram, and Snapchat blocking only works in Safari. Third-party browsers on iOS do not support content blocking extensions.")
                     .font(.system(size: ShortlessTheme.captionSize))
                     .foregroundColor(ShortlessTheme.textTertiary)
 
-                Text("TikTok is blocked entirely (full domain block) since all TikTok content is short-form video.")
+                Text("TikTok can be blocked system-wide using the DNS Filter toggle. This uses a local VPN and may conflict with other VPN apps (only one VPN can be active at a time).")
                     .font(.system(size: ShortlessTheme.captionSize))
                     .foregroundColor(ShortlessTheme.textTertiary)
             }

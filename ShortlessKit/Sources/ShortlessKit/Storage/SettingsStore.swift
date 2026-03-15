@@ -8,6 +8,9 @@ public final class SettingsStore: ObservableObject {
     private let defaults: UserDefaults
 
     @Published public private(set) var toggles: [Platform: Bool]
+    @Published public private(set) var vpnEnabled: Bool
+
+    private static let vpnEnabledKey = "vpnEnabled"
 
     public init() {
         guard let defaults = UserDefaults(suiteName: SettingsStore.appGroupID) else {
@@ -24,6 +27,7 @@ public final class SettingsStore: ObservableObject {
             initial[platform] = value
         }
         self.toggles = initial
+        self.vpnEnabled = defaults.object(forKey: SettingsStore.vpnEnabledKey) as? Bool ?? false
     }
 
     public func isEnabled(_ platform: Platform) -> Bool {
@@ -33,6 +37,11 @@ public final class SettingsStore: ObservableObject {
     public func setEnabled(_ platform: Platform, _ enabled: Bool) {
         defaults.set(enabled, forKey: platform.rawValue)
         toggles[platform] = enabled
+    }
+
+    public func setVPNEnabled(_ enabled: Bool) {
+        defaults.set(enabled, forKey: SettingsStore.vpnEnabledKey)
+        vpnEnabled = enabled
     }
 
     /// Returns the set of currently enabled platforms.
