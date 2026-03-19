@@ -95,7 +95,7 @@ struct DashboardView: View {
 
     private var vpnSection: some View {
         VStack(alignment: .leading, spacing: ShortlessTheme.cardSpacing) {
-            Text("SYSTEM-WIDE BLOCKING")
+            Text("TIKTOK DNS FILTER")
                 .font(.system(size: 10, weight: .semibold))
                 .foregroundColor(ShortlessTheme.textTertiary)
                 .tracking(0.5)
@@ -118,18 +118,34 @@ struct DashboardView: View {
                 .fill(ShortlessTheme.footerBorder)
                 .frame(height: 1)
 
-            HStack(spacing: 4) {
-                Text("Blocked today:")
-                    .font(.system(size: ShortlessTheme.captionSize))
-                    .foregroundColor(ShortlessTheme.textTertiary)
+            VStack(spacing: 6) {
+                if settings.streakDays > 0 {
+                    HStack(spacing: 4) {
+                        Image(systemName: "flame.fill")
+                            .font(.system(size: ShortlessTheme.captionSize))
+                            .foregroundColor(.orange)
 
-                Text("\(blockCount.todayCount)")
-                    .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
-                    .foregroundColor(ShortlessTheme.accent)
+                        Text("\(settings.streakDays) day\(settings.streakDays == 1 ? "" : "s") scroll-free")
+                            .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
+                            .foregroundColor(.orange)
+                    }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("\(settings.streakDays) days scroll-free streak")
+                }
+
+                HStack(spacing: 4) {
+                    Text("Blocked today:")
+                        .font(.system(size: ShortlessTheme.captionSize))
+                        .foregroundColor(ShortlessTheme.textTertiary)
+
+                    Text("\(blockCount.todayCount)")
+                        .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
+                        .foregroundColor(ShortlessTheme.accent)
+                }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Blocked \(blockCount.todayCount) elements today")
             }
             .padding(.top, 12)
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel("Blocked \(blockCount.todayCount) elements today")
         }
     }
 

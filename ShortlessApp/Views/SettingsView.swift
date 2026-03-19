@@ -44,6 +44,12 @@ struct SettingsView: View {
                 bulletPoint("DNS Filter", detail: "A local VPN blocks TikTok DNS queries system-wide. No data leaves your device.")
             }
 
+            Section(header: Text("Why Block Shorts?")) {
+                bulletPoint("Attention Fragmentation", detail: "Studies show short-form video reduces sustained attention span, making it harder to focus on longer tasks.")
+                bulletPoint("Algorithmic Loops", detail: "Infinite scroll feeds exploit dopamine-driven reward cycles, averaging 90+ minutes of daily unplanned screen time.")
+                bulletPoint("You Deserve the Choice", detail: "Shortless doesn't block platforms — it removes the addictive feed so you use them intentionally.")
+            }
+
             Section(header: Text("Limitations")) {
                 Text("YouTube, Instagram, and Snapchat blocking only works in Safari. Third-party browsers on iOS do not support content blocking extensions.")
                     .font(.system(size: ShortlessTheme.captionSize))
