@@ -26,10 +26,6 @@ struct SurveyPage: View {
                     .foregroundColor(ShortlessTheme.textPrimary)
                     .multilineTextAlignment(.center)
 
-                Text("Be honest — most people underestimate.")
-                    .font(.system(size: ShortlessTheme.bodySize))
-                    .foregroundColor(ShortlessTheme.textTertiary)
-
                 VStack(spacing: 10) {
                     ForEach(options, id: \.minutes) { option in
                         Button(action: { selectedMinutes = option.minutes }) {
