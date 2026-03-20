@@ -1,6 +1,7 @@
 import SwiftUI
 import FamilyControls
 import ManagedSettings
+import ShortlessKit
 
 /// Lets users pick native apps to block entirely using Apple's Screen Time API.
 /// Requires the Family Controls entitlement (com.apple.developer.family-controls).
@@ -196,7 +197,7 @@ struct AppBlockerView: View {
 
     private func applyShield() {
         store.shield.applications = selection.applicationTokens
-        store.shield.applicationCategories = SetOf(selection.categoryTokens)
+        store.shield.applicationCategories = .specific(selection.categoryTokens)
     }
 
     private func clearShield() {
