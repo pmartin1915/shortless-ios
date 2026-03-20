@@ -20,6 +20,7 @@ struct DashboardView: View {
                     platformCards
                     mindfulBreakButton
                     vpnSection
+                    appBlockingSection
                     wellbeingSection
                 }
                 .padding(ShortlessTheme.containerPadding)
@@ -140,6 +141,44 @@ struct DashboardView: View {
                 ),
                 vpnManager: vpnManager
             )
+        }
+    }
+
+    // MARK: - App Blocking Section
+
+    private var appBlockingSection: some View {
+        VStack(alignment: .leading, spacing: ShortlessTheme.cardSpacing) {
+            Text("APP BLOCKING")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundColor(ShortlessTheme.textTertiary)
+                .tracking(0.5)
+
+            NavigationLink(destination: AppBlockerView()) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Block Native Apps")
+                            .font(.system(size: ShortlessTheme.bodySize, weight: .semibold))
+                            .foregroundColor(ShortlessTheme.textPrimary)
+                        Text("Block apps system-wide using Screen Time")
+                            .font(.system(size: ShortlessTheme.captionSize))
+                            .foregroundColor(ShortlessTheme.textTertiary)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(ShortlessTheme.accent.opacity(0.6))
+                }
+                .padding(ShortlessTheme.cardPadding)
+                .background(ShortlessTheme.cardFill)
+                .overlay(
+                    RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius)
+                        .stroke(ShortlessTheme.cardBorder, lineWidth: 1)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius))
+            }
+            .buttonStyle(.plain)
         }
     }
 
