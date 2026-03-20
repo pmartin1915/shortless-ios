@@ -1,7 +1,9 @@
 import SwiftUI
+import ShortlessKit
 
 /// About screen: version, privacy policy, GitHub link, setup guide.
 struct SettingsView: View {
+    @ObservedObject var settings: SettingsStore
     @State private var showOnboarding = false
 
     var body: some View {
@@ -25,12 +27,23 @@ struct SettingsView: View {
                     showOnboarding = true
                 } label: {
                     HStack {
-                        Label("Setup Guide", systemImage: "questionmark.circle")
+                        Label("Replay Welcome Tour", systemImage: "sparkles")
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(ShortlessTheme.textTertiary)
                     }
+                }
+            }
+
+            Section(header: Text("Widgets")) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Add Shortless to your Home Screen")
+                        .font(.system(size: ShortlessTheme.bodySize, weight: .medium))
+                        .foregroundColor(ShortlessTheme.textPrimary)
+                    Text("Long-press your Home Screen, tap the + button in the top corner, then search for \"Shortless\" to add the Time Reclaimed widget.")
+                        .font(.system(size: ShortlessTheme.captionSize))
+                        .foregroundColor(ShortlessTheme.textTertiary)
                 }
             }
 
@@ -63,7 +76,9 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showOnboarding) {
-            OnboardingView()
+            NavigationStack {
+                OnboardingContainerView(settings: settings)
+            }
         }
     }
 

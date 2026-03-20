@@ -25,7 +25,7 @@ struct DashboardView: View {
             .background(ShortlessTheme.background.ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: SettingsView()) {
+                    NavigationLink(destination: SettingsView(settings: settings)) {
                         Image(systemName: "gearshape")
                             .foregroundColor(ShortlessTheme.textTertiary)
                     }
@@ -86,6 +86,7 @@ struct DashboardView: View {
                         set: { newValue in
                             settings.setEnabled(platform, newValue)
                             reloadContentBlocker()
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         }
                     )
                 )
@@ -134,13 +135,19 @@ struct DashboardView: View {
                             Text(formattedTimeReclaimed)
                                 .font(.system(size: 28, weight: .bold, design: .rounded))
                                 .foregroundColor(ShortlessTheme.textPrimary)
+
+                            if blockCount.totalCount == 0 {
+                                Text("Start browsing to track your progress")
+                                    .font(.system(size: ShortlessTheme.captionSize))
+                                    .foregroundColor(ShortlessTheme.textTertiary)
+                            }
                         }
 
                         Spacer()
 
                         Image(systemName: "chevron.right")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(ShortlessTheme.textTertiary)
+                            .foregroundColor(ShortlessTheme.accent.opacity(0.6))
                     }
 
                     HStack(spacing: 16) {
@@ -193,7 +200,7 @@ struct DashboardView: View {
         } else if minutes > 0 {
             return "\(minutes)m"
         } else {
-            return "0m"
+            return "--"
         }
     }
 
@@ -204,7 +211,7 @@ struct DashboardView: View {
     }
 
     private func checkFirstLaunch() {
-        let key = "hasCompletedOnboarding"
+        let key = "hasCompletedOnboarding_v2.1"
         guard let defaults = UserDefaults(suiteName: SettingsStore.appGroupID) else { return }
         if !defaults.bool(forKey: key) {
             showOnboarding = true

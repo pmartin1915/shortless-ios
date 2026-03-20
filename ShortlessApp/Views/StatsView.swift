@@ -53,6 +53,12 @@ struct StatsView: View {
                 .font(.system(size: 40, weight: .bold, design: .rounded))
                 .foregroundColor(ShortlessTheme.textPrimary)
 
+            if blockCount.totalCount == 0 {
+                Text("Enable Shortless in Safari to start tracking")
+                    .font(.system(size: ShortlessTheme.captionSize))
+                    .foregroundColor(ShortlessTheme.textTertiary)
+            }
+
             if settings.streakDays > 0 {
                 HStack(spacing: 4) {
                     Image(systemName: "flame.fill")
@@ -124,14 +130,14 @@ struct StatsView: View {
     }
 
     private var emptyChartState: some View {
-        VStack(spacing: 8) {
-            Image(systemName: "chart.bar")
-                .font(.system(size: 28))
-                .foregroundColor(ShortlessTheme.textTertiary)
-            Text("No data yet")
-                .font(.system(size: ShortlessTheme.bodySize, weight: .medium))
+        VStack(spacing: 12) {
+            Image(systemName: "chart.bar.xaxis.ascending")
+                .font(.system(size: 32))
+                .foregroundColor(ShortlessTheme.accent.opacity(0.6))
+            Text("Your chart will appear here")
+                .font(.system(size: ShortlessTheme.bodySize, weight: .semibold))
                 .foregroundColor(ShortlessTheme.textSecondary)
-            Text("Keep browsing with Shortless enabled to see your blocking activity here.")
+            Text("Browse with Shortless enabled in Safari.\nEach blocked short builds your progress.")
                 .font(.system(size: ShortlessTheme.captionSize))
                 .foregroundColor(ShortlessTheme.textTertiary)
                 .multilineTextAlignment(.center)
@@ -187,7 +193,7 @@ struct StatsView: View {
         } else if minutes > 0 {
             return "\(minutes)m"
         } else {
-            return "0m"
+            return "--"
         }
     }
 }
