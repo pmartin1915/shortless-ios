@@ -211,7 +211,7 @@ struct DashboardView: View {
     }
 
     private func checkFirstLaunch() {
-        let key = "hasCompletedOnboarding_v2.1"
+        let key = "hasCompletedOnboarding_v2.1.5"
         guard let defaults = UserDefaults(suiteName: SettingsStore.appGroupID) else { return }
         if !defaults.bool(forKey: key) {
             showOnboarding = true
