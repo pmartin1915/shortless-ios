@@ -10,7 +10,7 @@ shorts,reels,tiktok,screen time,digital wellbeing,doom scrolling,focus,short for
 
 Stop doom-scrolling. Start living.
 
-Short-form video feeds are engineered to keep you scrolling. YouTube Shorts, Instagram Reels, TikTok, and Snapchat Spotlight use algorithmic loops that exploit dopamine-driven reward cycles — averaging over 90 minutes of unplanned screen time per day.
+Short-form video feeds are designed to keep you watching. Without realizing it, YouTube Shorts, Instagram Reels, TikTok, and Snapchat Spotlight can consume hours of time you could spend on things that matter to you.
 
 Shortless gives you back the choice.
 
@@ -51,23 +51,28 @@ Also available as a browser extension for Chrome and Firefox. Block short-form v
 
 Dear App Review Team,
 
-We are resubmitting Shortless after a 4.3(a) rejection of v1.0. This is a fundamentally re-architected app — not a minor update. Here is what makes Shortless unique:
+Shortless is a digital wellbeing tool — not a generic content blocker. We built it because we were personally struggling with short-form video consumption and couldn't find an app that addressed the problem holistically. Here is what makes Shortless unique:
 
-1. UNIQUE SCOPE — Shortless is the only app that exclusively targets short-form video feeds across four platforms (YouTube Shorts, Instagram Reels, TikTok, Snapchat Spotlight) while preserving full access to the rest of each platform.
+1. WELLBEING-FIRST DESIGN — Shortless is not about blocking content; it's about helping users reclaim their time. The app opens with a personalized onboarding flow that asks how much time users spend on short-form video, calculates the real-world impact (hours/week, days/year), and helps them set a personal reduction goal. The "Time Reclaimed" dashboard (SwiftUI Charts) visualizes progress over 7 and 30 days, and a scroll-free streak counter reinforces positive behavior.
 
-2. SYSTEM-WIDE DNS BLOCKING — We use NEPacketTunnelProvider to block TikTok at the DNS level across all apps, not just Safari. This is a local, on-device VPN that synthesizes NXDOMAIN responses for TikTok domains. No traffic is sent to any remote server. No other content blocker offers this.
+2. SYSTEM-WIDE DNS BLOCKING (NEPacketTunnelProvider) — Shortless is the only short-form video blocker that uses an on-device DNS filter to block TikTok system-wide — across all apps, not just Safari. The local VPN synthesizes NXDOMAIN responses for TikTok domains. No traffic is sent to any remote server. We are not aware of any other content blocker that offers this capability.
 
-3. DIGITAL WELLBEING DASHBOARD — The "Time Reclaimed" screen uses SwiftUI Charts to visualize blocking activity over 7-day and 30-day periods, with total blocks, daily averages, and active day counts. This transforms Shortless from a blocker into a wellness tool.
+3. SURGICAL SCOPE — Unlike general-purpose content blockers, Shortless exclusively targets short-form video feeds on four platforms (YouTube Shorts, Instagram Reels, TikTok, Snapchat Spotlight). Users keep full access to YouTube videos, Instagram photos, Snapchat messages, and everything else. We remove the addictive feed, not the platform.
 
-4. PERSONALIZED ONBOARDING — A 5-page onboarding flow asks users about their short-form video usage, calculates personalized impact ("That's X hours/week, Y days/year"), and lets them set a reduction goal (25%–100%). This creates user investment and positions the app as a behavioral change tool.
+4. THREE-LAYER ARCHITECTURE — Safari Content Blocker (declarative rules), Safari Web Extension (MutationObserver for SPA navigation), and NEPacketTunnelProvider DNS filter. Each layer addresses a different technical challenge. This is a deeply considered architecture, not a template.
 
-5. WIDGETKIT INTEGRATION — Small, medium, and Lock Screen widgets show streak days, daily blocks, and Time Reclaimed. Very few content blockers offer widgets.
+5. WIDGETKIT + HOME SCREEN INTEGRATION — Small, medium, and Lock Screen widgets show streak days, daily blocks, and Time Reclaimed. The app includes step-by-step widget setup guidance and an "Open Settings" button to help users enable Safari extensions.
 
-6. CROSS-PLATFORM + OPEN SOURCE — Shortless is also available as a Chrome Web Store and Firefox Add-ons extension. The entire codebase is open source under MIT (github.com/pmartin1915/shortless-ios).
+6. OPEN SOURCE + CROSS-PLATFORM — Every line of code is MIT-licensed at github.com/pmartin1915/shortless-ios. Also available as Chrome and Firefox extensions at github.com/pmartin1915/shortless. We built this to help people, not to monetize data.
 
-No demo account is needed. Simply enable the Safari extensions in Settings > Safari > Extensions.
+HOW TO TEST:
+- Open Settings > Safari > Extensions > Enable both Shortless extensions
+- Return to Shortless and toggle platforms on/off
+- Open YouTube in Safari to verify Shorts tab is hidden
+- Toggle the TikTok DNS Filter and try opening TikTok in any app
+- No demo account needed
 
-We appreciate your review and are confident this version provides significant, unique value to users.
+Thank you for reviewing Shortless. We built this for ourselves first, and we believe it provides genuine, unique value.
 
 ---
 
