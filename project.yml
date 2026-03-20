@@ -13,8 +13,8 @@ packages:
 settings:
   base:
     SWIFT_VERSION: "5.9"
-    MARKETING_VERSION: "2.0.0"
-    CURRENT_PROJECT_VERSION: "2"
+    MARKETING_VERSION: "2.1.0"
+    CURRENT_PROJECT_VERSION: "1"
     ALWAYS_SEARCH_USER_PATHS: NO
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     DEVELOPMENT_TEAM: NN8F5WX25R
@@ -31,6 +31,8 @@ targets:
       - target: ShortlessSafariExtension
         embed: true
       - target: ShortlessVPNExtension
+        embed: true
+      - target: ShortlessWidget
         embed: true
     settings:
       base:
@@ -132,6 +134,31 @@ targets:
           NSExtensionPointIdentifier: com.apple.networkextension.packet-tunnel
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PacketTunnelProvider
 
+  ShortlessWidget:
+    type: app-extension
+    platform: iOS
+    sources: ShortlessWidget
+    dependencies:
+      - package: ShortlessKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pmartin1915.shortless.Widget
+        PRODUCT_NAME: ShortlessWidget
+        CODE_SIGN_ENTITLEMENTS: ShortlessWidget/ShortlessWidget.entitlements
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "Shortless Widget AppStore"
+    info:
+      path: ShortlessWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Shortless Widget
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+
   ShortlessTests:
     type: bundle.unit-test
     platform: iOS
@@ -155,6 +182,7 @@ schemes:
       targets:
         Shortless: all
         ShortlessVPNExtension: all
+        ShortlessWidget: all
     test:
       targets:
         - ShortlessTests

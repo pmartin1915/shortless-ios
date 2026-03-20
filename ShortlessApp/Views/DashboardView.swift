@@ -18,7 +18,7 @@ struct DashboardView: View {
                     header
                     platformCards
                     vpnSection
-                    footer
+                    wellbeingSection
                 }
                 .padding(ShortlessTheme.containerPadding)
             }
@@ -32,7 +32,9 @@ struct DashboardView: View {
                 }
             }
             .sheet(isPresented: $showOnboarding) {
-                OnboardingView()
+                NavigationStack {
+                    OnboardingContainerView(settings: settings)
+                }
             }
             .onAppear {
                 checkFirstLaunch()
@@ -110,42 +112,88 @@ struct DashboardView: View {
         }
     }
 
-    // MARK: - Footer
+    // MARK: - Wellbeing Section
 
-    private var footer: some View {
-        VStack(spacing: 0) {
-            Rectangle()
-                .fill(ShortlessTheme.footerBorder)
-                .frame(height: 1)
+    private var wellbeingSection: some View {
+        VStack(alignment: .leading, spacing: ShortlessTheme.cardSpacing) {
+            Text("WELLBEING")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundColor(ShortlessTheme.textTertiary)
+                .tracking(0.5)
 
-            VStack(spacing: 6) {
-                if settings.streakDays > 0 {
-                    HStack(spacing: 4) {
-                        Image(systemName: "flame.fill")
-                            .font(.system(size: ShortlessTheme.captionSize))
-                            .foregroundColor(.orange)
+            NavigationLink(destination: StatsView(blockCount: blockCount, settings: settings)) {
+                VStack(spacing: 8) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Time Reclaimed")
+                                .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
+                                .foregroundColor(ShortlessTheme.textTertiary)
+                                .textCase(.uppercase)
+                                .tracking(0.3)
 
-                        Text("\(settings.streakDays) day\(settings.streakDays == 1 ? "" : "s") scroll-free")
-                            .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
-                            .foregroundColor(.orange)
+                            Text(formattedTimeReclaimed)
+                                .font(.system(size: 28, weight: .bold, design: .rounded))
+                                .foregroundColor(ShortlessTheme.textPrimary)
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(ShortlessTheme.textTertiary)
                     }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel("\(settings.streakDays) days scroll-free streak")
-                }
 
-                HStack(spacing: 4) {
-                    Text("Blocked today:")
-                        .font(.system(size: ShortlessTheme.captionSize))
-                        .foregroundColor(ShortlessTheme.textTertiary)
+                    HStack(spacing: 16) {
+                        if settings.streakDays > 0 {
+                            HStack(spacing: 4) {
+                                Image(systemName: "flame.fill")
+                                    .font(.system(size: ShortlessTheme.captionSize))
+                                    .foregroundColor(.orange)
+                                Text("\(settings.streakDays)d streak")
+                                    .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
+                                    .foregroundColor(.orange)
+                            }
+                        }
 
-                    Text("\(blockCount.todayCount)")
-                        .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
-                        .foregroundColor(ShortlessTheme.accent)
+                        HStack(spacing: 4) {
+                            Text("Today:")
+                                .font(.system(size: ShortlessTheme.captionSize))
+                                .foregroundColor(ShortlessTheme.textTertiary)
+                            Text("\(blockCount.todayCount)")
+                                .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
+                                .foregroundColor(ShortlessTheme.accent)
+                        }
+
+                        Spacer()
+
+                        Text("View stats")
+                            .font(.system(size: ShortlessTheme.captionSize))
+                            .foregroundColor(ShortlessTheme.accent)
+                    }
                 }
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel("Blocked \(blockCount.todayCount) elements today")
+                .padding(ShortlessTheme.cardPadding)
+                .background(ShortlessTheme.cardFill)
+                .overlay(
+                    RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius)
+                        .stroke(ShortlessTheme.cardBorder, lineWidth: 1)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius))
             }
-            .padding(.top, 12)
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var formattedTimeReclaimed: String {
+        let totalSeconds = blockCount.timeReclaimed(secondsPerShort: settings.estimatedSecondsPerShort)
+        let hours = Int(totalSeconds) / 3600
+        let minutes = (Int(totalSeconds) % 3600) / 60
+
+        if hours > 0 {
+            return "\(hours)h \(minutes)m"
+        } else if minutes > 0 {
+            return "\(minutes)m"
+        } else {
+            return "0m"
         }
     }
 

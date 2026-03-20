@@ -10,9 +10,15 @@ public final class SettingsStore: ObservableObject {
     @Published public private(set) var toggles: [Platform: Bool]
     @Published public private(set) var vpnEnabled: Bool
     @Published public private(set) var streakStartDate: Date?
+    @Published public private(set) var dailyShortMinutes: Int
+    @Published public private(set) var reductionGoalPercent: Int
+    @Published public private(set) var estimatedSecondsPerShort: Int
 
     private static let vpnEnabledKey = "vpnEnabled"
     private static let streakStartDateKey = "streakStartDate"
+    private static let dailyShortMinutesKey = "dailyShortMinutes"
+    private static let reductionGoalPercentKey = "reductionGoalPercent"
+    private static let estimatedSecondsPerShortKey = "estimatedSecondsPerShort"
 
     public init() {
         guard let defaults = UserDefaults(suiteName: SettingsStore.appGroupID) else {
@@ -31,6 +37,9 @@ public final class SettingsStore: ObservableObject {
         self.toggles = initial
         self.vpnEnabled = defaults.object(forKey: SettingsStore.vpnEnabledKey) as? Bool ?? false
         self.streakStartDate = defaults.object(forKey: SettingsStore.streakStartDateKey) as? Date
+        self.dailyShortMinutes = defaults.object(forKey: SettingsStore.dailyShortMinutesKey) as? Int ?? 60
+        self.reductionGoalPercent = defaults.object(forKey: SettingsStore.reductionGoalPercentKey) as? Int ?? 100
+        self.estimatedSecondsPerShort = defaults.object(forKey: SettingsStore.estimatedSecondsPerShortKey) as? Int ?? 15
     }
 
     public func isEnabled(_ platform: Platform) -> Bool {
@@ -46,6 +55,21 @@ public final class SettingsStore: ObservableObject {
     public func setVPNEnabled(_ enabled: Bool) {
         defaults.set(enabled, forKey: SettingsStore.vpnEnabledKey)
         vpnEnabled = enabled
+    }
+
+    public func setDailyShortMinutes(_ minutes: Int) {
+        defaults.set(minutes, forKey: SettingsStore.dailyShortMinutesKey)
+        dailyShortMinutes = minutes
+    }
+
+    public func setReductionGoalPercent(_ percent: Int) {
+        defaults.set(percent, forKey: SettingsStore.reductionGoalPercentKey)
+        reductionGoalPercent = percent
+    }
+
+    public func setEstimatedSecondsPerShort(_ seconds: Int) {
+        defaults.set(seconds, forKey: SettingsStore.estimatedSecondsPerShortKey)
+        estimatedSecondsPerShort = seconds
     }
 
     /// Returns the set of currently enabled platforms.
