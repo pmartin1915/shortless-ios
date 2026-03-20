@@ -68,9 +68,9 @@ struct SettingsView: View {
             }
 
             Section(header: Text("Why Block Shorts?")) {
-                bulletPoint("Attention Fragmentation", detail: "Studies show short-form video reduces sustained attention span, making it harder to focus on longer tasks.")
-                bulletPoint("Algorithmic Loops", detail: "Infinite scroll feeds exploit dopamine-driven reward cycles, averaging 90+ minutes of daily unplanned screen time.")
-                bulletPoint("You Deserve the Choice", detail: "Shortless doesn't block platforms — it removes the addictive feed so you use them intentionally.")
+                bulletPoint("Attention Fragmentation", detail: "Research shows short-form video can reduce sustained attention span, making it harder to focus on longer tasks.")
+                bulletPoint("Algorithmic Feeds", detail: "Infinite scroll feeds are designed to keep you watching. Without realizing it, quick clips can add up to 90+ minutes a day.")
+                bulletPoint("You Deserve the Choice", detail: "Shortless doesn't block platforms — it removes the feed so you use them on your own terms.")
             }
 
             Section(header: Text("Limitations")) {

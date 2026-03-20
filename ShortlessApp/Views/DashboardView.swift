@@ -20,7 +20,6 @@ struct DashboardView: View {
                     platformCards
                     mindfulBreakButton
                     vpnSection
-                    appBlockingSection
                     wellbeingSection
                 }
                 .padding(ShortlessTheme.containerPadding)
