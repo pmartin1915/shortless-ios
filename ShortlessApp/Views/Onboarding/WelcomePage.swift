@@ -10,7 +10,7 @@ struct WelcomePage: View {
             Spacer()
 
             VStack(spacing: 20) {
-                Image(systemName: "eye.slash.fill")
+                Image(systemName: "hourglass.bottomhalf.filled")
                     .font(.system(size: 64))
                     .foregroundColor(ShortlessTheme.accent)
                     .opacity(appeared ? 1 : 0)

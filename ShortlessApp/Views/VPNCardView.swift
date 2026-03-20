@@ -102,9 +102,11 @@ struct VPNCardView: View {
 
             vpnManager.startTunnel()
             isEnabled = true
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } else {
             vpnManager.stopTunnel()
             isEnabled = false
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
         }
     }
 }

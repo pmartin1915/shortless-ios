@@ -33,7 +33,7 @@ struct ImpactPage: View {
                 }
                 .padding(.horizontal, ShortlessTheme.containerPadding)
 
-                Text("Short-form video is designed to keep you scrolling. Algorithmic feeds exploit dopamine loops, fragmenting your attention and consuming hours you didn't plan to spend.")
+                Text("Short-form feeds are built to keep you watching. Without realizing it, quick clips add up to hours of time you could spend on things that matter to you.")
                     .font(.system(size: ShortlessTheme.bodySize))
                     .foregroundColor(ShortlessTheme.textTertiary)
                     .multilineTextAlignment(.center)

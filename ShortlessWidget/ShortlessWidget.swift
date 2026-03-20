@@ -94,7 +94,7 @@ struct ShortlessWidgetView: View {
                     .font(.system(size: 11))
                     .foregroundColor(.gray)
             } else {
-                Image(systemName: "eye.slash.fill")
+                Image(systemName: "hourglass.bottomhalf.filled")
                     .font(.system(size: 28))
                     .foregroundColor(Color(hex: "#3ABAB4"))
                 Text("Shortless")
@@ -134,7 +134,7 @@ struct ShortlessWidgetView: View {
                         .font(.system(size: 11))
                         .foregroundColor(.gray)
                 } else {
-                    Image(systemName: "eye.slash.fill")
+                    Image(systemName: "hourglass.bottomhalf.filled")
                         .font(.system(size: 22))
                         .foregroundColor(Color(hex: "#3ABAB4"))
                     Text("Shortless")
@@ -188,7 +188,7 @@ struct ShortlessWidgetView: View {
         ZStack {
             AccessoryWidgetBackground()
             VStack(spacing: 1) {
-                Image(systemName: entry.streakDays > 0 ? "flame.fill" : "eye.slash.fill")
+                Image(systemName: entry.streakDays > 0 ? "flame.fill" : "hourglass.bottomhalf.filled")
                     .font(.system(size: 12))
                 Text(entry.streakDays > 0 ? "\(entry.streakDays)d" : "\(entry.todayCount)")
                     .font(.system(size: 14, weight: .bold, design: .rounded))
