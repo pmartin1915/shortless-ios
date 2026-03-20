@@ -1,19 +1,19 @@
 import SwiftUI
 
-/// Design tokens ported from the browser extension's popup.css.
-/// All values match the desktop extension exactly for brand consistency.
+/// Design tokens for the iOS app.
+/// Teal accent (#3ABAB4) differentiates from browser extension's blue (#2E75B6).
 enum ShortlessTheme {
     // MARK: - Colors
 
     static let background    = Color(hex: "#1a1a2e")
-    static let accent        = Color(hex: "#2E75B6")
+    static let accent        = Color(hex: "#3ABAB4")
     static let textPrimary   = Color.white
     static let textSecondary = Color(hex: "#e0e0e0")
-    static let textTertiary  = Color(hex: "#888888")
-    static let cardBorder    = Color.white.opacity(0.1)
-    static let cardFill      = Color.white.opacity(0.03)
+    static let textTertiary  = Color(hex: "#9a9a9a")
+    static let cardBorder    = Color.white.opacity(0.12)
+    static let cardFill      = Color.white.opacity(0.05)
     static let toggleOff     = Color(hex: "#555555")
-    static let footerBorder  = Color.white.opacity(0.06)
+    static let footerBorder  = Color.white.opacity(0.08)
 
     // MARK: - Typography
 

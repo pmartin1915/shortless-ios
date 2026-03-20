@@ -96,7 +96,7 @@ struct ShortlessWidgetView: View {
             } else {
                 Image(systemName: "eye.slash.fill")
                     .font(.system(size: 28))
-                    .foregroundColor(Color(hex: "#2E75B6"))
+                    .foregroundColor(Color(hex: "#3ABAB4"))
                 Text("Shortless")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(.white)
@@ -107,7 +107,7 @@ struct ShortlessWidgetView: View {
             HStack(spacing: 4) {
                 Image(systemName: "shield.checkered")
                     .font(.system(size: 10))
-                    .foregroundColor(Color(hex: "#2E75B6"))
+                    .foregroundColor(Color(hex: "#3ABAB4"))
                 Text("\(entry.todayCount) today")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(.gray)
@@ -136,7 +136,7 @@ struct ShortlessWidgetView: View {
                 } else {
                     Image(systemName: "eye.slash.fill")
                         .font(.system(size: 22))
-                        .foregroundColor(Color(hex: "#2E75B6"))
+                        .foregroundColor(Color(hex: "#3ABAB4"))
                     Text("Shortless")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.white)
@@ -167,7 +167,7 @@ struct ShortlessWidgetView: View {
         HStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.system(size: 11))
-                .foregroundColor(Color(hex: "#2E75B6"))
+                .foregroundColor(Color(hex: "#3ABAB4"))
                 .frame(width: 16)
 
             Text(label)
@@ -203,8 +203,10 @@ struct ShortlessWidgetView: View {
         let minutes = (Int(entry.timeReclaimedSeconds) % 3600) / 60
         if hours > 0 {
             return "\(hours)h \(minutes)m"
-        } else {
+        } else if minutes > 0 {
             return "\(minutes)m"
+        } else {
+            return "--"
         }
     }
 }
