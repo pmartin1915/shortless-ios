@@ -34,17 +34,27 @@ struct SettingsView: View {
                             .foregroundColor(ShortlessTheme.textTertiary)
                     }
                 }
+
+                Button {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    HStack {
+                        Label("Open Settings", systemImage: "gear")
+                        Spacer()
+                        Image(systemName: "arrow.up.forward")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(ShortlessTheme.textTertiary)
+                    }
+                }
             }
 
-            Section(header: Text("Widgets")) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Add Shortless to your Home Screen")
-                        .font(.system(size: ShortlessTheme.bodySize, weight: .medium))
-                        .foregroundColor(ShortlessTheme.textPrimary)
-                    Text("Long-press your Home Screen, tap the + button in the top corner, then search for \"Shortless\" to add the Time Reclaimed widget.")
-                        .font(.system(size: ShortlessTheme.captionSize))
-                        .foregroundColor(ShortlessTheme.textTertiary)
-                }
+            Section(header: Text("Add Widget")) {
+                settingsStep(number: 1, title: "Long-press Home Screen", detail: "Hold any empty area until apps jiggle")
+                settingsStep(number: 2, title: "Tap +", detail: "Top-left corner of the screen")
+                settingsStep(number: 3, title: "Search \"Shortless\"", detail: "Find the Time Reclaimed widget")
+                settingsStep(number: 4, title: "Choose a size", detail: "Small, medium, or lock screen")
             }
 
             Section(header: Text("How It Works")) {
@@ -100,6 +110,26 @@ struct SettingsView: View {
             return URL(string: "https://github.com/pmartin1915")!
         }
         return url
+    }
+
+    private func settingsStep(number: Int, title: String, detail: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Text("\(number)")
+                .font(.system(size: 12, weight: .bold))
+                .foregroundColor(ShortlessTheme.background)
+                .frame(width: 22, height: 22)
+                .background(ShortlessTheme.accent)
+                .clipShape(Circle())
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: ShortlessTheme.bodySize, weight: .medium))
+                    .foregroundColor(ShortlessTheme.textPrimary)
+                Text(detail)
+                    .font(.system(size: ShortlessTheme.captionSize))
+                    .foregroundColor(ShortlessTheme.textTertiary)
+            }
+        }
     }
 
     private func bulletPoint(_ title: String, detail: String) -> some View {

@@ -34,14 +34,38 @@ struct SetupPage: View {
 
             Spacer()
 
-            Button(action: onDone) {
-                Text("I'm Ready")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.white)
+            VStack(spacing: 12) {
+                Button {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "gear")
+                            .font(.system(size: 14))
+                        Text("Open Settings")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .foregroundColor(ShortlessTheme.accent)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
-                    .background(ShortlessTheme.accent)
+                    .background(ShortlessTheme.cardFill)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(ShortlessTheme.accent, lineWidth: 1)
+                    )
                     .cornerRadius(10)
+                }
+
+                Button(action: onDone) {
+                    Text("I'm Ready")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(ShortlessTheme.accent)
+                        .cornerRadius(10)
+                }
             }
             .padding(.horizontal, ShortlessTheme.containerPadding)
             .padding(.bottom, 48)
