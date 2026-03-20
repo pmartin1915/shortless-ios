@@ -9,6 +9,7 @@ struct DashboardView: View {
     @ObservedObject var blockCount: BlockCountStore
     @StateObject private var vpnManager = VPNManager()
     @State private var showOnboarding = false
+    @State private var showMindfulBreak = false
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -17,6 +18,7 @@ struct DashboardView: View {
                 VStack(spacing: ShortlessTheme.sectionSpacing) {
                     header
                     platformCards
+                    mindfulBreakButton
                     vpnSection
                     wellbeingSection
                 }
@@ -35,6 +37,9 @@ struct DashboardView: View {
                 NavigationStack {
                     OnboardingContainerView(settings: settings)
                 }
+            }
+            .sheet(isPresented: $showMindfulBreak) {
+                MindfulBreakView()
             }
             .onAppear {
                 checkFirstLaunch()
@@ -91,6 +96,31 @@ struct DashboardView: View {
                     )
                 )
             }
+        }
+    }
+
+    // MARK: - Mindful Break
+
+    private var mindfulBreakButton: some View {
+        Button {
+            showMindfulBreak = true
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "leaf.fill")
+                    .font(.system(size: 14))
+                Text("I feel like scrolling")
+                    .font(.system(size: ShortlessTheme.bodySize, weight: .semibold))
+            }
+            .foregroundColor(ShortlessTheme.accent)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(ShortlessTheme.cardFill)
+            .overlay(
+                RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius)
+                    .stroke(ShortlessTheme.accent.opacity(0.4), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius))
         }
     }
 
