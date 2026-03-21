@@ -13,7 +13,7 @@
   /* ── Design Tokens ── */
   :root {
     --bg: #1a1a2e;
-    --accent: #2E75B6;
+    --accent: #3ABAB4;
     --text1: #ffffff;
     --text2: #e0e0e0;
     --text3: #888888;
@@ -370,12 +370,51 @@
       <div class="content" style="padding-top: 8px;">
         <!-- Header -->
         <div class="flex items-center gap8 mb4">
-          <span style="font-size:28px; font-weight:700;">Shortless</span>
-          <span style="background:var(--accent); color:#fff; font-size:11px; font-weight:600; padding:3px 8px; border-radius:12px;">v2.1.0</span>
+          <span style="font-size:22px; font-weight:700;">Shortless</span>
+          <span style="font-size:11px; font-weight:500; color:var(--text3);">v2.1.0</span>
         </div>
-        <p style="font-size:14px; color:var(--text2); margin-bottom:20px;">Block the Scroll. Keep the Content.</p>
+        <p style="font-size:12px; color:var(--text3); margin-bottom:18px; letter-spacing:0.2px;">Block the Scroll. Keep the Content.</p>
+
+        <!-- Time Reclaimed Hero Card -->
+        <div style="padding:16px; margin-bottom:10px; border-radius:12px; background:linear-gradient(135deg, rgba(58,186,180,0.08), rgba(255,255,255,0.03)); border:1px solid rgba(58,186,180,0.2);">
+          <div class="flex items-center justify-between">
+            <div>
+              <div style="font-size:11px; color:var(--accent); font-weight:600; letter-spacing:0.8px; margin-bottom:6px; opacity:0.8;">TIME RECLAIMED</div>
+              <div style="font-size:36px; font-weight:700; line-height:1;">2h 15m</div>
+            </div>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--accent)" style="opacity:0.4;"><path d="M6 2v6h.01L6 8.01 10 12 6 16l.01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/></svg>
+          </div>
+          <div style="height:1px; background:rgba(255,255,255,0.08); margin:12px 0;"></div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap8">
+              <span style="font-size:14px;">&#x1F525;</span>
+              <span style="font-size:13px; font-weight:600; color:#f59e0b;">7d streak</span>
+            </div>
+            <div class="flex items-center gap8">
+              <span style="font-size:13px; color:var(--text3);">Today:</span>
+              <span style="font-size:13px; font-weight:600; color:var(--accent);">42</span>
+            </div>
+            <div class="flex items-center gap8">
+              <span style="font-size:13px; color:var(--accent);">View stats</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--accent)" style="opacity:0.6;"><path d="M9 18l6-6-6-6v12z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mindful Break Button -->
+        <div style="padding:14px 16px; margin-bottom:18px; border-radius:12px; background:rgba(58,186,180,0.06); border:1px solid rgba(58,186,180,0.3); cursor:pointer;">
+          <div class="flex items-center" style="gap:10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent)"><path d="M17 8C8 10 5.9 16.2 3.7 21.2c-.2.5.3 1 .8.8C9.2 19.9 15 17.5 17 8z"/><path d="M12.5 3.5c0 0 2 4 0 8s-4 5-4 5" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            <div style="flex:1;">
+              <div style="font-size:15px; font-weight:600; color:var(--accent);">I feel like scrolling</div>
+              <div style="font-size:12px; color:var(--accent); opacity:0.7;">Take a mindful break instead</div>
+            </div>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)" style="opacity:0.5;"><path d="M9 18l6-6-6-6v12z"/></svg>
+          </div>
+        </div>
 
         <!-- Platform Toggles -->
+        <div class="section-header">PLATFORMS</div>
         <div class="card">
           <div class="platform-row">
             <div class="platform-icon" style="background:#FF0000;">
@@ -432,7 +471,7 @@
         <div class="section-header" style="margin-top:24px;">TIKTOK DNS FILTER</div>
         <div class="card">
           <div class="platform-row">
-            <div class="platform-icon" style="background:rgba(46,117,182,0.15);">
+            <div class="platform-icon" style="background:rgba(58,186,180,0.15);">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 2L3 7v5c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5zm0 2.2L19 8.5v3.5c0 4.6-3.2 8.9-7 10-3.8-1.1-7-5.4-7-10V8.5L12 4.2z"/><path d="M12 7v10c2.8-.8 5-3.8 5-7V8l-5-1z" opacity=".3"/></svg>
             </div>
             <div class="platform-info">
@@ -442,29 +481,6 @@
             <div class="toggle"></div>
           </div>
           <p style="font-size:12px; color:var(--text3); margin-top:8px; padding-left:54px;">Blocks TikTok across all apps, not just Safari</p>
-        </div>
-
-        <!-- Wellbeing Section -->
-        <div class="section-header" style="margin-top:24px;">WELLBEING</div>
-        <div class="card" style="padding:16px;">
-          <div class="flex items-center justify-between">
-            <div>
-              <div style="font-size:11px; color:var(--text3); font-weight:600; letter-spacing:0.8px; margin-bottom:4px;">TIME RECLAIMED</div>
-              <div style="font-size:32px; font-weight:700;">2h 15m</div>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--text3)"><path d="M9 18l6-6-6-6v12z"/></svg>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between mt8" style="padding:0 4px;">
-          <div class="flex items-center gap8">
-            <span style="font-size:18px;">&#x1F525;</span>
-            <span style="font-size:14px; font-weight:600; color:#f59e0b;">7d streak</span>
-          </div>
-          <div class="flex items-center gap8">
-            <span style="font-size:14px; font-weight:600; color:var(--accent);">Today: 42</span>
-          </div>
-          <span style="font-size:14px; color:var(--accent);">View stats</span>
         </div>
       </div>
 
@@ -585,9 +601,9 @@
         <!-- Eye/Shield icon -->
         <div style="margin-bottom:32px;">
           <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-            <circle cx="40" cy="40" r="36" stroke="var(--accent)" stroke-width="3" fill="rgba(46,117,182,0.1)"/>
+            <circle cx="40" cy="40" r="36" stroke="var(--accent)" stroke-width="3" fill="rgba(58,186,180,0.1)"/>
             <path d="M40 24C30 24 22 30 18 40c4 10 12 16 22 16s18-6 22-16c-4-10-12-16-22-16z" stroke="var(--accent)" stroke-width="2.5" fill="none"/>
-            <circle cx="40" cy="40" r="7" stroke="var(--accent)" stroke-width="2.5" fill="rgba(46,117,182,0.2)"/>
+            <circle cx="40" cy="40" r="7" stroke="var(--accent)" stroke-width="2.5" fill="rgba(58,186,180,0.2)"/>
             <line x1="18" y1="58" x2="62" y2="22" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
           </svg>
         </div>
@@ -694,7 +710,7 @@
         <!-- Gradient wallpaper -->
         <div style="position:absolute; inset:0; background:linear-gradient(160deg, #0f0c29, #302b63, #24243e); z-index:0;"></div>
         <!-- Blurred blobs for depth -->
-        <div style="position:absolute; top:15%; left:10%; width:180px; height:180px; background:radial-gradient(circle, rgba(46,117,182,0.25), transparent 70%); z-index:0;"></div>
+        <div style="position:absolute; top:15%; left:10%; width:180px; height:180px; background:radial-gradient(circle, rgba(58,186,180,0.25), transparent 70%); z-index:0;"></div>
         <div style="position:absolute; bottom:25%; right:5%; width:200px; height:200px; background:radial-gradient(circle, rgba(120,60,180,0.2), transparent 70%); z-index:0;"></div>
 
         <div style="position:relative; z-index:1; padding:20px 20px 0; width:100%;">
@@ -794,7 +810,7 @@
         <div class="ios-list">
           <div class="ios-list-item">
             <div class="flex items-center gap12">
-              <div style="width:32px; height:32px; border-radius:8px; background:rgba(46,117,182,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <div style="width:32px; height:32px; border-radius:8px; background:rgba(58,186,180,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 2L3 7v5c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z"/></svg>
               </div>
               <div>
@@ -805,7 +821,7 @@
           </div>
           <div class="ios-list-item">
             <div class="flex items-center gap12">
-              <div style="width:32px; height:32px; border-radius:8px; background:rgba(46,117,182,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <div style="width:32px; height:32px; border-radius:8px; background:rgba(58,186,180,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 15l-4-4 1.4-1.4L11 14.2l5.6-5.6L18 10l-7 7z"/></svg>
               </div>
               <div>
@@ -816,7 +832,7 @@
           </div>
           <div class="ios-list-item">
             <div class="flex items-center gap12">
-              <div style="width:32px; height:32px; border-radius:8px; background:rgba(46,117,182,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <div style="width:32px; height:32px; border-radius:8px; background:rgba(58,186,180,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
               </div>
               <div>
@@ -854,7 +870,7 @@
           </div>
           <div class="ios-list-item">
             <div class="flex items-center gap12">
-              <div style="width:32px; height:32px; border-radius:8px; background:rgba(46,117,182,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <div style="width:32px; height:32px; border-radius:8px; background:rgba(58,186,180,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.4-1.4L10 14.2l7.6-7.6L19 8l-9 9z"/></svg>
               </div>
               <div>

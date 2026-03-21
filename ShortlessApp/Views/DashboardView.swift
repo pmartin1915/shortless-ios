@@ -17,10 +17,10 @@ struct DashboardView: View {
             ScrollView {
                 VStack(spacing: ShortlessTheme.sectionSpacing) {
                     header
-                    platformCards
+                    wellbeingHero
                     mindfulBreakButton
+                    platformSection
                     vpnSection
-                    wellbeingSection
                 }
                 .padding(ShortlessTheme.containerPadding)
             }
@@ -79,10 +79,139 @@ struct DashboardView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Platform Cards
+    // MARK: - Wellbeing Hero
 
-    private var platformCards: some View {
-        VStack(spacing: ShortlessTheme.cardSpacing) {
+    private var wellbeingHero: some View {
+        NavigationLink(destination: StatsView(blockCount: blockCount, settings: settings)) {
+            VStack(spacing: 12) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("TIME RECLAIMED")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(ShortlessTheme.accent.opacity(0.8))
+                            .tracking(0.8)
+
+                        Text(formattedTimeReclaimed)
+                            .font(.system(size: 36, weight: .bold, design: .rounded))
+                            .foregroundColor(ShortlessTheme.textPrimary)
+
+                        if blockCount.totalCount == 0 {
+                            Text("Start browsing to track your progress")
+                                .font(.system(size: ShortlessTheme.captionSize))
+                                .foregroundColor(ShortlessTheme.textTertiary)
+                        }
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "hourglass")
+                        .font(.system(size: 32, weight: .light))
+                        .foregroundColor(ShortlessTheme.accent.opacity(0.4))
+                }
+
+                Divider()
+                    .background(Color.white.opacity(0.08))
+
+                HStack(spacing: 16) {
+                    if settings.streakDays > 0 {
+                        HStack(spacing: 4) {
+                            Image(systemName: "flame.fill")
+                                .font(.system(size: 13))
+                                .foregroundColor(.orange)
+                            Text("\(settings.streakDays)d streak")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor(.orange)
+                        }
+                    }
+
+                    HStack(spacing: 4) {
+                        Text("Today:")
+                            .font(.system(size: 13))
+                            .foregroundColor(ShortlessTheme.textTertiary)
+                        Text("\(blockCount.todayCount)")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(ShortlessTheme.accent)
+                    }
+
+                    Spacer()
+
+                    HStack(spacing: 4) {
+                        Text("View stats")
+                            .font(.system(size: 13))
+                            .foregroundColor(ShortlessTheme.accent)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(ShortlessTheme.accent.opacity(0.6))
+                    }
+                }
+            }
+            .padding(16)
+            .background(
+                LinearGradient(
+                    colors: [
+                        ShortlessTheme.accent.opacity(0.08),
+                        ShortlessTheme.cardFill
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(ShortlessTheme.accent.opacity(0.2), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Mindful Break
+
+    private var mindfulBreakButton: some View {
+        Button {
+            showMindfulBreak = true
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "leaf.fill")
+                    .font(.system(size: 16))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("I feel like scrolling")
+                        .font(.system(size: 15, weight: .semibold))
+                    Text("Take a mindful break instead")
+                        .font(.system(size: 12))
+                        .opacity(0.7)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .opacity(0.5)
+            }
+            .foregroundColor(ShortlessTheme.accent)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(ShortlessTheme.accent.opacity(0.06))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(ShortlessTheme.accent.opacity(0.3), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+    }
+
+    // MARK: - Platform Section
+
+    private var platformSection: some View {
+        VStack(alignment: .leading, spacing: ShortlessTheme.cardSpacing) {
+            Text("PLATFORMS")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundColor(ShortlessTheme.textTertiary)
+                .tracking(0.5)
+
             ForEach(Platform.allCases) { platform in
                 PlatformCardView(
                     platform: platform,
@@ -96,31 +225,6 @@ struct DashboardView: View {
                     )
                 )
             }
-        }
-    }
-
-    // MARK: - Mindful Break
-
-    private var mindfulBreakButton: some View {
-        Button {
-            showMindfulBreak = true
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        } label: {
-            HStack(spacing: 8) {
-                Image(systemName: "leaf.fill")
-                    .font(.system(size: 14))
-                Text("I feel like scrolling")
-                    .font(.system(size: ShortlessTheme.bodySize, weight: .semibold))
-            }
-            .foregroundColor(ShortlessTheme.accent)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background(ShortlessTheme.cardFill)
-            .overlay(
-                RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius)
-                    .stroke(ShortlessTheme.accent.opacity(0.4), lineWidth: 1)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius))
         }
     }
 
@@ -181,82 +285,6 @@ struct DashboardView: View {
         }
     }
 
-    // MARK: - Wellbeing Section
-
-    private var wellbeingSection: some View {
-        VStack(alignment: .leading, spacing: ShortlessTheme.cardSpacing) {
-            Text("WELLBEING")
-                .font(.system(size: 10, weight: .semibold))
-                .foregroundColor(ShortlessTheme.textTertiary)
-                .tracking(0.5)
-
-            NavigationLink(destination: StatsView(blockCount: blockCount, settings: settings)) {
-                VStack(spacing: 8) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Time Reclaimed")
-                                .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
-                                .foregroundColor(ShortlessTheme.textTertiary)
-                                .textCase(.uppercase)
-                                .tracking(0.3)
-
-                            Text(formattedTimeReclaimed)
-                                .font(.system(size: 28, weight: .bold, design: .rounded))
-                                .foregroundColor(ShortlessTheme.textPrimary)
-
-                            if blockCount.totalCount == 0 {
-                                Text("Start browsing to track your progress")
-                                    .font(.system(size: ShortlessTheme.captionSize))
-                                    .foregroundColor(ShortlessTheme.textTertiary)
-                            }
-                        }
-
-                        Spacer()
-
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(ShortlessTheme.accent.opacity(0.6))
-                    }
-
-                    HStack(spacing: 16) {
-                        if settings.streakDays > 0 {
-                            HStack(spacing: 4) {
-                                Image(systemName: "flame.fill")
-                                    .font(.system(size: ShortlessTheme.captionSize))
-                                    .foregroundColor(.orange)
-                                Text("\(settings.streakDays)d streak")
-                                    .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
-                                    .foregroundColor(.orange)
-                            }
-                        }
-
-                        HStack(spacing: 4) {
-                            Text("Today:")
-                                .font(.system(size: ShortlessTheme.captionSize))
-                                .foregroundColor(ShortlessTheme.textTertiary)
-                            Text("\(blockCount.todayCount)")
-                                .font(.system(size: ShortlessTheme.captionSize, weight: .semibold))
-                                .foregroundColor(ShortlessTheme.accent)
-                        }
-
-                        Spacer()
-
-                        Text("View stats")
-                            .font(.system(size: ShortlessTheme.captionSize))
-                            .foregroundColor(ShortlessTheme.accent)
-                    }
-                }
-                .padding(ShortlessTheme.cardPadding)
-                .background(ShortlessTheme.cardFill)
-                .overlay(
-                    RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius)
-                        .stroke(ShortlessTheme.cardBorder, lineWidth: 1)
-                )
-                .clipShape(RoundedRectangle(cornerRadius: ShortlessTheme.cardCornerRadius))
-            }
-            .buttonStyle(.plain)
-        }
-    }
 
     private var formattedTimeReclaimed: String {
         let totalSeconds = blockCount.timeReclaimed(secondsPerShort: settings.estimatedSecondsPerShort)
