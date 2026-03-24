@@ -320,7 +320,7 @@ struct AppBlockerView: View {
                 Text(label)
                     .font(.system(size: 10, weight: .medium))
                     .foregroundColor(ShortlessTheme.textTertiary)
-                Text(ScheduleRule.formatTimeStatic(hour: hour, minute: minute))
+                Text(ScheduleRule.formatTime(hour: hour, minute: minute))
                     .font(.system(size: 18, weight: .semibold, design: .rounded))
                     .foregroundColor(ShortlessTheme.textPrimary)
             }
@@ -440,7 +440,13 @@ struct AppBlockerView: View {
 
         // Clear the direct shield — let DeviceActivityMonitor handle it on schedule
         clearShield()
-        scheduleManager.startMonitoring(schedule: scheduleRule)
+
+        do {
+            try scheduleManager.startMonitoring(schedule: scheduleRule)
+        } catch {
+            authError = "Failed to start schedule: \(error.localizedDescription)"
+            print("[Shortless] Schedule monitoring failed: \(error)")
+        }
     }
 
     // MARK: - Persistence
@@ -469,12 +475,4 @@ struct AppBlockerView: View {
     }
 }
 
-// MARK: - ScheduleRule Helper (static access for Views)
-
-extension ScheduleRule {
-    static func formatTimeStatic(hour: Int, minute: Int) -> String {
-        let period = hour >= 12 ? "PM" : "AM"
-        let displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
-        return String(format: "%d:%02d %@", displayHour, minute, period)
-    }
-}
+// ScheduleRule.formatTime is defined in ShortlessKit/Models/ScheduleRule.swift

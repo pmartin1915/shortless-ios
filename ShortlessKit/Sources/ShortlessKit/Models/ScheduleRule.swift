@@ -48,7 +48,7 @@ public struct ScheduleRule: Codable, Equatable {
         Self.formatTime(hour: endHour, minute: endMinute)
     }
 
-    private static func formatTime(hour: Int, minute: Int) -> String {
+    public static func formatTime(hour: Int, minute: Int) -> String {
         let period = hour >= 12 ? "PM" : "AM"
         let displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
         return String(format: "%d:%02d %@", displayHour, minute, period)
