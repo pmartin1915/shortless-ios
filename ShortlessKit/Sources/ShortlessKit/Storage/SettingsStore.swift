@@ -1,11 +1,14 @@
 import Foundation
+import Combine
 
 /// Manages per-platform toggle state via App Group UserDefaults.
-/// Shared across main app, Content Blocker, Safari Web Extension, and Network Extension.
+/// Extensions write directly to the shared UserDefaults; this class
+/// observes changes and keeps @Published properties in sync.
 public final class SettingsStore: ObservableObject {
     public static let appGroupID = "group.dev.pmartin1915.shortless"
 
     private let defaults: UserDefaults
+    private var cancellable: AnyCancellable?
 
     @Published public private(set) var toggles: [Platform: Bool]
     @Published public private(set) var vpnEnabled: Bool
@@ -13,12 +16,20 @@ public final class SettingsStore: ObservableObject {
     @Published public private(set) var dailyShortMinutes: Int
     @Published public private(set) var reductionGoalPercent: Int
     @Published public private(set) var estimatedSecondsPerShort: Int
+    @Published public private(set) var schedule: ScheduleRule?
+    @Published public private(set) var appBlockerEnabled: Bool
+    @Published public private(set) var blockingMode: String  // "alwaysOn" or "scheduled"
 
-    private static let vpnEnabledKey = "vpnEnabled"
-    private static let streakStartDateKey = "streakStartDate"
-    private static let dailyShortMinutesKey = "dailyShortMinutes"
-    private static let reductionGoalPercentKey = "reductionGoalPercent"
-    private static let estimatedSecondsPerShortKey = "estimatedSecondsPerShort"
+    // MARK: - UserDefaults Keys (public so extensions can use the same keys)
+    public static let vpnEnabledKey = "vpnEnabled"
+    public static let streakStartDateKey = "streakStartDate"
+    public static let dailyShortMinutesKey = "dailyShortMinutes"
+    public static let reductionGoalPercentKey = "reductionGoalPercent"
+    public static let estimatedSecondsPerShortKey = "estimatedSecondsPerShort"
+    public static let scheduleKey = "appBlockerSchedule"
+    public static let appBlockerEnabledKey = "appBlockerEnabled"
+    public static let appBlockerSelectionKey = "appBlockerSelection"
+    public static let blockingModeKey = "appBlockerMode"
 
     public init() {
         guard let defaults = UserDefaults(suiteName: SettingsStore.appGroupID) else {
@@ -40,6 +51,38 @@ public final class SettingsStore: ObservableObject {
         self.dailyShortMinutes = defaults.object(forKey: SettingsStore.dailyShortMinutesKey) as? Int ?? 60
         self.reductionGoalPercent = defaults.object(forKey: SettingsStore.reductionGoalPercentKey) as? Int ?? 100
         self.estimatedSecondsPerShort = defaults.object(forKey: SettingsStore.estimatedSecondsPerShortKey) as? Int ?? 15
+        self.appBlockerEnabled = defaults.object(forKey: SettingsStore.appBlockerEnabledKey) as? Bool ?? false
+        self.blockingMode = defaults.string(forKey: SettingsStore.blockingModeKey) ?? "alwaysOn"
+        if let scheduleData = defaults.data(forKey: SettingsStore.scheduleKey),
+           let saved = try? JSONDecoder().decode(ScheduleRule.self, from: scheduleData) {
+            self.schedule = saved
+        } else {
+            self.schedule = nil
+        }
+
+        // Observe external changes (e.g., from extensions writing to shared UserDefaults)
+        cancellable = NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
+            .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
+            .sink { [weak self] _ in self?.reloadFromDefaults() }
+    }
+
+    /// Re-read all values from UserDefaults to keep @Published properties in sync
+    /// with changes made by extensions or other processes.
+    private func reloadFromDefaults() {
+        for platform in Platform.allCases {
+            let value = defaults.object(forKey: platform.rawValue) as? Bool ?? true
+            if toggles[platform] != value {
+                toggles[platform] = value
+            }
+        }
+        let newVPN = defaults.object(forKey: SettingsStore.vpnEnabledKey) as? Bool ?? false
+        if vpnEnabled != newVPN { vpnEnabled = newVPN }
+
+        let newAppBlocker = defaults.object(forKey: SettingsStore.appBlockerEnabledKey) as? Bool ?? false
+        if appBlockerEnabled != newAppBlocker { appBlockerEnabled = newAppBlocker }
+
+        let newMode = defaults.string(forKey: SettingsStore.blockingModeKey) ?? "alwaysOn"
+        if blockingMode != newMode { blockingMode = newMode }
     }
 
     public func isEnabled(_ platform: Platform) -> Bool {
@@ -72,15 +115,38 @@ public final class SettingsStore: ObservableObject {
         estimatedSecondsPerShort = seconds
     }
 
+    public func setSchedule(_ rule: ScheduleRule?) {
+        if let rule = rule, let data = try? JSONEncoder().encode(rule) {
+            defaults.set(data, forKey: SettingsStore.scheduleKey)
+        } else {
+            defaults.removeObject(forKey: SettingsStore.scheduleKey)
+        }
+        schedule = rule
+    }
+
+    public func setAppBlockerEnabled(_ enabled: Bool) {
+        defaults.set(enabled, forKey: SettingsStore.appBlockerEnabledKey)
+        appBlockerEnabled = enabled
+    }
+
+    public func setBlockingMode(_ mode: String) {
+        defaults.set(mode, forKey: SettingsStore.blockingModeKey)
+        blockingMode = mode
+    }
+
     /// Returns the set of currently enabled platforms.
     public var enabledPlatforms: Set<Platform> {
         Set(Platform.allCases.filter { isEnabled($0) })
     }
 
     /// Number of full days since all platforms were enabled (streak).
+    /// Uses startOfDay so streaks increment at midnight, not 24h from start.
     public var streakDays: Int {
         guard let start = streakStartDate else { return 0 }
-        return max(0, Calendar.current.dateComponents([.day], from: start, to: Date()).day ?? 0)
+        let calendar = Calendar.current
+        let startOfDay1 = calendar.startOfDay(for: start)
+        let startOfDay2 = calendar.startOfDay(for: Date())
+        return max(0, calendar.dateComponents([.day], from: startOfDay1, to: startOfDay2).day ?? 0)
     }
 
     private func updateStreak() {

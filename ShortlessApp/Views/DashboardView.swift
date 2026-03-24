@@ -21,6 +21,7 @@ struct DashboardView: View {
                     mindfulBreakButton
                     platformSection
                     vpnSection
+                    appBlockingSection
                 }
                 .padding(ShortlessTheme.containerPadding)
             }
@@ -256,7 +257,7 @@ struct DashboardView: View {
                 .foregroundColor(ShortlessTheme.textTertiary)
                 .tracking(0.5)
 
-            NavigationLink(destination: AppBlockerView()) {
+            NavigationLink(destination: AppBlockerView(settings: settings)) {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Block Native Apps")
@@ -307,7 +308,7 @@ struct DashboardView: View {
     }
 
     private func checkFirstLaunch() {
-        let key = "hasCompletedOnboarding_v2.1.5"
+        let key = "hasCompletedOnboarding_v3.0.0"
         guard let defaults = UserDefaults(suiteName: SettingsStore.appGroupID) else { return }
         if !defaults.bool(forKey: key) {
             showOnboarding = true

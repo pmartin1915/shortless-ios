@@ -26,6 +26,8 @@ All content blocking happens entirely on your device. The app uses three mechani
 2. **Safari Web Extension** — Content scripts monitor web pages for dynamically loaded short-form content (common in single-page apps like YouTube and Instagram) and hide it in real time.
 3. **DNS Filter (optional)** — Uses Apple's `NEPacketTunnelProvider` API to create a local, on-device VPN that filters DNS queries. When enabled, DNS queries for TikTok-related domains are answered locally with "domain not found" (NXDOMAIN). Queries for all other domains are forwarded unchanged to public DNS resolvers (Cloudflare 1.1.1.1 or Google 8.8.8.8). **No network traffic is inspected, logged, stored, or transmitted to any server operated by Shortless.** The VPN tunnel operates entirely on your device and does not route your traffic through any external server.
 
+4. **App Blocking (optional)** — Uses Apple's Screen Time API (`FamilyControls`, `ManagedSettings`, `DeviceActivity`) to block native apps on a user-defined schedule. When enabled, you choose which apps to block using Apple's system-provided picker. **Shortless only receives opaque tokens representing your selections — it cannot see app names, usage data, or any other information about your device.** The blocking is enforced entirely by iOS. No app usage data is collected, stored, or transmitted by Shortless.
+
 None of these mechanisms send personal data off your device.
 
 ## Data Stored Locally
@@ -35,6 +37,7 @@ Shortless stores a small amount of data on your device using App Groups (shared 
 - **Platform preferences** — Which platforms you have enabled or disabled (on/off toggles)
 - **Block counter** — A daily count of blocked content items, stored by date for the Time Reclaimed dashboard
 - **VPN toggle state** — Whether the optional DNS filter is enabled or disabled
+- **App blocking state** — Whether app blocking is enabled, your selected blocking schedule, and opaque app tokens (Apple does not allow apps to read actual app names from these tokens)
 - **Onboarding responses** — Your answers to the usage survey (estimated daily short-form video time) and reduction goal. These are used to personalize your Time Reclaimed calculations
 - **Streak data** — The date you started your current scroll-free streak
 
