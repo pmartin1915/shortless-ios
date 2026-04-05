@@ -1,20 +1,18 @@
 import Foundation
 
 /// Manages per-platform toggle state via App Group UserDefaults.
-/// Shared across main app, Content Blocker, Safari Web Extension, and Network Extension.
+/// Shared across main app, Content Blocker, and Safari Web Extension.
 public final class SettingsStore: ObservableObject {
     public static let appGroupID = "group.dev.pmartin1915.shortless"
 
     private let defaults: UserDefaults
 
     @Published public private(set) var toggles: [Platform: Bool]
-    @Published public private(set) var vpnEnabled: Bool
     @Published public private(set) var streakStartDate: Date?
     @Published public private(set) var dailyShortMinutes: Int
     @Published public private(set) var reductionGoalPercent: Int
     @Published public private(set) var estimatedSecondsPerShort: Int
 
-    private static let vpnEnabledKey = "vpnEnabled"
     private static let streakStartDateKey = "streakStartDate"
     private static let dailyShortMinutesKey = "dailyShortMinutes"
     private static let reductionGoalPercentKey = "reductionGoalPercent"
@@ -35,7 +33,6 @@ public final class SettingsStore: ObservableObject {
             initial[platform] = value
         }
         self.toggles = initial
-        self.vpnEnabled = defaults.object(forKey: SettingsStore.vpnEnabledKey) as? Bool ?? false
         self.streakStartDate = defaults.object(forKey: SettingsStore.streakStartDateKey) as? Date
         self.dailyShortMinutes = defaults.object(forKey: SettingsStore.dailyShortMinutesKey) as? Int ?? 60
         self.reductionGoalPercent = defaults.object(forKey: SettingsStore.reductionGoalPercentKey) as? Int ?? 100
@@ -50,11 +47,6 @@ public final class SettingsStore: ObservableObject {
         defaults.set(enabled, forKey: platform.rawValue)
         toggles[platform] = enabled
         updateStreak()
-    }
-
-    public func setVPNEnabled(_ enabled: Bool) {
-        defaults.set(enabled, forKey: SettingsStore.vpnEnabledKey)
-        vpnEnabled = enabled
     }
 
     public func setDailyShortMinutes(_ minutes: Int) {

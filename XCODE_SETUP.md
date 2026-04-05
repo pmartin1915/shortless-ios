@@ -161,16 +161,3 @@ If you prefer not to use XcodeGen, you can create the project manually:
 9. Replace generated files with `ShortlessSafariExtension/` contents
 10. Add App Groups capability (`group.dev.pmartin1915.shortless`) to all 3 targets
 11. Add `ShortlessKit` as dependency to all targets
-
-## Phase 2: Network Extension (iOS 26+)
-
-When iOS 26 ships:
-
-1. File → New → Target → iOS → Network Extension
-2. Choose "URL Filter Provider"
-3. Product Name: `ShortlessNetworkExtension`
-4. Bundle Identifier: `dev.pmartin1915.shortless.NetworkExtension`
-5. Add App Groups capability with `group.dev.pmartin1915.shortless`
-6. Add the `com.apple.developer.networking.networkextension` entitlement
-7. Replace generated files with `ShortlessNetworkExtension/ShortlessURLFilterProvider.swift`
-8. Request the Network Extension entitlement from Apple Developer portal

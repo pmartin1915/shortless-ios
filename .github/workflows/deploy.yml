@@ -68,7 +68,6 @@ jobs:
           PROFILE_APP: ${{ secrets.PROVISIONING_PROFILE_APP }}
           PROFILE_CB: ${{ secrets.PROVISIONING_PROFILE_CONTENT_BLOCKER }}
           PROFILE_EXT: ${{ secrets.PROVISIONING_PROFILE_SAFARI_EXT }}
-          PROFILE_VPN: ${{ secrets.PROVISIONING_PROFILE_VPN }}
           PROFILE_WIDGET: ${{ secrets.PROVISIONING_PROFILE_WIDGET }}
         run: |
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
@@ -76,27 +75,23 @@ jobs:
           echo "$PROFILE_APP" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/app.mobileprovision
           echo "$PROFILE_CB" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/contentblocker.mobileprovision
           echo "$PROFILE_EXT" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/safariext.mobileprovision
-          echo "$PROFILE_VPN" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/vpnext.mobileprovision
           echo "$PROFILE_WIDGET" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/widget.mobileprovision
 
           # Extract UUIDs for build settings
           APP_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/app.mobileprovision))
           CB_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/contentblocker.mobileprovision))
           EXT_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/safariext.mobileprovision))
-          VPN_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/vpnext.mobileprovision))
           WIDGET_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/widget.mobileprovision))
 
           # Rename files to UUID.mobileprovision (required by Xcode)
           mv ~/Library/MobileDevice/Provisioning\ Profiles/app.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${APP_UUID}.mobileprovision
           mv ~/Library/MobileDevice/Provisioning\ Profiles/contentblocker.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${CB_UUID}.mobileprovision
           mv ~/Library/MobileDevice/Provisioning\ Profiles/safariext.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${EXT_UUID}.mobileprovision
-          mv ~/Library/MobileDevice/Provisioning\ Profiles/vpnext.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${VPN_UUID}.mobileprovision
           mv ~/Library/MobileDevice/Provisioning\ Profiles/widget.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${WIDGET_UUID}.mobileprovision
 
           echo "APP_PROFILE_UUID=$APP_UUID" >> $GITHUB_ENV
           echo "CB_PROFILE_UUID=$CB_UUID" >> $GITHUB_ENV
           echo "EXT_PROFILE_UUID=$EXT_UUID" >> $GITHUB_ENV
-          echo "VPN_PROFILE_UUID=$VPN_UUID" >> $GITHUB_ENV
           echo "WIDGET_PROFILE_UUID=$WIDGET_UUID" >> $GITHUB_ENV
 
       - name: Setup App Store Connect API Key
@@ -144,8 +139,6 @@ jobs:
               <string>Shortless ContentBlocker AppStore</string>
               <key>dev.pmartin1915.shortless.SafariExtension</key>
               <string>Shortless SafariExtension AppStore</string>
-              <key>dev.pmartin1915.shortless.VPNExtension</key>
-              <string>Shortless VPNExtension AppStore</string>
               <key>dev.pmartin1915.shortless.Widget</key>
               <string>Shortless Widget AppStore</string>
             </dict>

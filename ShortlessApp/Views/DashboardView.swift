@@ -7,7 +7,6 @@ import ShortlessKit
 struct DashboardView: View {
     @ObservedObject var settings: SettingsStore
     @ObservedObject var blockCount: BlockCountStore
-    @StateObject private var vpnManager = VPNManager()
     @State private var showOnboarding = false
     @Environment(\.scenePhase) private var scenePhase
 
@@ -17,7 +16,6 @@ struct DashboardView: View {
                 VStack(spacing: ShortlessTheme.sectionSpacing) {
                     header
                     platformCards
-                    vpnSection
                     wellbeingSection
                 }
                 .padding(ShortlessTheme.containerPadding)
@@ -39,12 +37,10 @@ struct DashboardView: View {
             .onAppear {
                 checkFirstLaunch()
                 blockCount.refresh()
-                Task { await vpnManager.loadManager() }
             }
             .onChange(of: scenePhase) { newPhase in
                 if newPhase == .active {
                     blockCount.refresh()
-                    Task { await vpnManager.loadManager() }
                 }
             }
         }
@@ -91,25 +87,6 @@ struct DashboardView: View {
                     )
                 )
             }
-        }
-    }
-
-    // MARK: - VPN Section
-
-    private var vpnSection: some View {
-        VStack(alignment: .leading, spacing: ShortlessTheme.cardSpacing) {
-            Text("TIKTOK DNS FILTER")
-                .font(.system(size: 10, weight: .semibold))
-                .foregroundColor(ShortlessTheme.textTertiary)
-                .tracking(0.5)
-
-            VPNCardView(
-                isEnabled: Binding(
-                    get: { settings.vpnEnabled },
-                    set: { newValue in settings.setVPNEnabled(newValue) }
-                ),
-                vpnManager: vpnManager
-            )
         }
     }
 
