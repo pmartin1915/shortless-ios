@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shortless — Support</title>
+  <meta name="description" content="Support and FAQ for Shortless, the short-form video feed blocker for iOS, Chrome, and Firefox.">
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --card: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.1);
+      --text-primary: #e0e0e0;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #888;
+      --accent: #3ABAB4;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    header {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .tagline {
+      font-size: 15px;
+      color: var(--text-tertiary);
+    }
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 20px 0 8px;
+    }
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    ul, ol {
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      padding-left: 24px;
+    }
+    li { margin-bottom: 6px; }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .contact-card h3 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+    code {
+      background: rgba(58, 186, 180, 0.15);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Menlo, Monaco, 'Courier New', monospace;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Shortless Support</h1>
+      <p class="tagline">Block the Scroll. Keep the Content.</p>
+    </header>
+
+    <section>
+      <h2>Get Help</h2>
+      <p>Need help with Shortless? We offer several ways to get support, and we respond to every inquiry.</p>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Report an Issue</h3>
+          <p>Report bugs, ask questions, or request features. We triage every issue within 48 hours.</p>
+          <p><a href="https://github.com/pmartin1915/shortless-ios/issues/new" target="_blank" rel="noopener">Open a New Issue →</a></p>
+        </div>
+        <div class="contact-card">
+          <h3>Browse Known Issues</h3>
+          <p>Someone may have already asked your question or reported your bug.</p>
+          <p><a href="https://github.com/pmartin1915/shortless-ios/issues" target="_blank" rel="noopener">View All Issues →</a></p>
+        </div>
+      </div>
+      <p style="margin-top: 16px; font-size: 14px; color: var(--text-tertiary);">Creating a GitHub account is free and takes under a minute at <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>.</p>
+    </section>
+
+    <section>
+      <h2>Setup Guide</h2>
+      <div class="card">
+        <h3>iOS — Enable Safari Extensions</h3>
+        <p>Shortless uses Safari Content Blocker and Safari Web Extension to block short-form content. After installing the app, you need to enable both in iOS Settings:</p>
+        <ol>
+          <li>Open the <strong>Settings</strong> app on your iPhone or iPad</li>
+          <li>Scroll down and tap <strong>Safari</strong></li>
+          <li>Tap <strong>Extensions</strong></li>
+          <li>Enable <strong>Shortless Content Blocker</strong></li>
+          <li>Enable <strong>Shortless Safari Extension</strong></li>
+          <li>Tap <strong>Shortless Safari Extension</strong>, then <strong>All Websites</strong>, and select <strong>Allow</strong></li>
+        </ol>
+        <p>Once enabled, open Safari and browse to YouTube, Instagram, or Snapchat. Short-form content will be hidden automatically.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Frequently Asked Questions</h2>
+
+      <h3>What does Shortless block?</h3>
+      <p>Shortless targets short-form video feeds on four platforms: YouTube Shorts, Instagram Reels, TikTok, and Snapchat Spotlight. You keep full access to everything else — long videos, photos, messages, and normal feeds work as usual.</p>
+
+      <h3>Why isn't it blocking content?</h3>
+      <p>The most common cause is that the Safari extensions aren't enabled. Follow the Setup Guide above. Also ensure you're using Safari — third-party browsers on iOS do not support content blocking extensions.</p>
+
+      <h3>Does Shortless work in Chrome, Firefox, or other iOS browsers?</h3>
+      <p>Shortless is available as a browser extension for Chrome and Firefox on desktop. On iOS, Shortless only works in Safari due to Apple platform restrictions that prevent third-party browsers from using content blockers.</p>
+
+      <h3>Does Shortless collect any data?</h3>
+      <p>No. Shortless collects zero personal data. There are no analytics, no tracking, no accounts, and no servers. Everything runs on your device. Read the full <a href="https://github.com/pmartin1915/shortless-ios/blob/master/PRIVACY_POLICY.md" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+
+      <h3>Can I block TikTok natively (not just in Safari)?</h3>
+      <p>Native TikTok app blocking is coming in a future update that uses Apple's Screen Time API. In the current version, Shortless blocks TikTok in Safari only.</p>
+
+      <h3>How do I toggle blocking per platform?</h3>
+      <p>Open the Shortless app, and you'll see toggle switches for each platform on the main screen. Toggling a platform off immediately updates the Safari content blocker rules.</p>
+
+      <h3>Where is my data stored?</h3>
+      <p>All preferences (toggles, streak data, block count, onboarding answers) are stored locally on your device using Apple's standard UserDefaults via an App Group shared between the app and its extensions. No data ever leaves your device.</p>
+
+      <h3>Is Shortless open source?</h3>
+      <p>Yes. The entire codebase is MIT-licensed and publicly available at <a href="https://github.com/pmartin1915/shortless-ios" target="_blank" rel="noopener">github.com/pmartin1915/shortless-ios</a>.</p>
+
+      <h3>How do I uninstall?</h3>
+      <p>Delete the Shortless app from your home screen as you would any other app. All associated data (including Safari extension state) is removed automatically.</p>
+    </section>
+
+    <section>
+      <h2>Troubleshooting</h2>
+
+      <h3>YouTube Shorts still show up in Safari</h3>
+      <p>Verify the Safari Web Extension is enabled with "All Websites" access (Setup Guide above). Also make sure the YouTube toggle in the Shortless app is ON. Try closing and reopening Safari.</p>
+
+      <h3>The block counter isn't updating</h3>
+      <p>The counter updates when the Safari Web Extension detects and blocks content. Force-close and reopen the Shortless app to refresh. If the counter still shows 0, the Safari Web Extension may not be running — recheck your Settings → Safari → Extensions.</p>
+
+      <h3>Widget shows "--" or isn't updating</h3>
+      <p>iOS widgets refresh on the system's schedule (typically every 15-60 minutes). Opening the main Shortless app forces an immediate refresh of widget data.</p>
+
+      <h3>Found a bug?</h3>
+      <p>Please <a href="https://github.com/pmartin1915/shortless-ios/issues/new" target="_blank" rel="noopener">open a GitHub issue</a> with your iOS version, device model, and steps to reproduce. We triage bug reports within 48 hours.</p>
+    </section>
+
+    <footer>
+      <p>Shortless is open source under the MIT license.</p>
+      <p><a href="https://github.com/pmartin1915/shortless-ios" target="_blank" rel="noopener">GitHub</a> &middot; <a href="https://github.com/pmartin1915/shortless-ios/blob/master/PRIVACY_POLICY.md" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="https://github.com/pmartin1915/shortless-ios/issues" target="_blank" rel="noopener">Report an Issue</a></p>
+    </footer>
+  </div>
+</body>
+</html>
